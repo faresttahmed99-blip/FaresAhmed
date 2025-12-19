@@ -2,129 +2,168 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Fares ❤️ Arwa</title>
+<title>فارس ❤️ أروى</title>
 
 <style>
 body{
   margin:0;
   height:100vh;
-  background:radial-gradient(circle,#ff9acb,#ff4f9a);
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:Arial;
-  direction:rtl;
+  background: radial-gradient(circle, #ff9acb, #ff4f9a);
+  font-family: Arial;
+  direction: rtl;
   overflow:hidden;
-}
-
-#rose{
-  font-size:90px;
-  cursor:pointer;
-  animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.2);}
-  100%{transform:scale(1);}
-}
-
-#box{
-  display:none;
+  color:white;
   text-align:center;
 }
 
+/* ===== شاشة القفل ===== */
+#lock .rose{
+  font-size:70px;
+  cursor:pointer;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.2)}
+  100%{transform:scale(1)}
+}
 input,button{
-  padding:10px;
+  padding:10px 15px;
   font-size:16px;
   margin-top:10px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
 }
-
 button{
-  background:#ff2f92;
+  background:#e60073;
   color:white;
+  cursor:pointer;
 }
 
-#heartWrap{
+/* ===== المشاهد ===== */
+.scene{
   display:none;
   position:relative;
 }
 
+/* ===== القلب ===== */
 .heart{
-  font-size:180px;
-  color:red;
+  width:120px;
+  height:120px;
+  background:red;
+  position:relative;
+  transform: rotate(-45deg);
   animation:beat 1.2s infinite;
+  margin:auto;
 }
-
+.heart::before,
+.heart::after{
+  content:"";
+  width:120px;
+  height:120px;
+  background:red;
+  border-radius:50%;
+  position:absolute;
+}
+.heart::before{top:-60px;left:0}
+.heart::after{left:60px;top:0}
 @keyframes beat{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.1);}
-  100%{transform:scale(1);}
+  0%{transform:rotate(-45deg) scale(1)}
+  50%{transform:rotate(-45deg) scale(1.15)}
+  100%{transform:rotate(-45deg) scale(1)}
 }
 
 .names{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  color:white;
+  margin-top:20px;
   font-size:22px;
-  animation:float 2s infinite;
-}
-
-@keyframes float{
-  0%{transform:translate(-50%,-50%) translateY(0);}
-  50%{transform:translate(-50%,-50%) translateY(-10px);}
-  100%{transform:translate(-50%,-50%) translateY(0);}
+  font-weight:bold;
 }
 
 .candle{
-  position:absolute;
-  bottom:-40px;
-  font-size:40px;
+  font-size:24px;
+  margin:10px;
 }
 
-.left{left:-60px;}
-.right{right:-60px;}
+/* ===== كلام الحب ===== */
+.love-text{
+  font-size:20px;
+  line-height:1.8;
+  padding:20px;
+  animation:fade 2s;
+}
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
+}
 </style>
 </head>
 
 <body>
 
+<!-- شاشة القفل -->
 <div id="lock">
-  <div id="rose" onclick="showPass()">🌹</div>
-  <p style="color:white">اضغطي على الوردة</p>
+  <p>اضغطي على الوردة 🌹</p>
+  <div class="rose" onclick="showPass()">🌹</div>
+
+  <div id="passBox" style="display:none">
+    <p>كلمة السر ❤️</p>
+    <input type="password" id="pass">
+    <br>
+    <button onclick="check()">دخول</button>
+  </div>
 </div>
 
-<div id="box">
-  <p style="color:white">اكتبي كلمة السر ❤️</p>
-  <input type="password" id="pass">
+<!-- المشهد الأول -->
+<div id="scene1" class="scene">
+  <div class="heart"></div>
+  <div class="names">
+    فارس <br> ❤️ <br> أروى
+  </div>
+  <div>
+    <span class="candle">🕯️</span>
+    <span class="candle">🕯️</span>
+  </div>
   <br>
-  <button onclick="check()">دخول</button>
+  <button onclick="nextScene()">Next ❤️</button>
 </div>
 
-<div id="heartWrap">
-  <div class="heart">❤️</div>
-  <div class="names">فارس 💞 أروى</div>
-  <div class="candle left">🕯️</div>
-  <div class="candle right">🕯️</div>
+<!-- المشهد التاني -->
+<div id="scene2" class="scene">
+  <div class="love-text">
+    أول ما شوفتك حبيتك  
+    <br>
+    ومن غير ما أحس قلبي اختارك  
+    <br><br>
+    بقيتي أجمل صدفة في حياتي  
+    <br>
+    وأقرب شخص لقلبي  
+    <br><br>
+    بحبك ❤️
+    <br><br>
+    — فارس
+  </div>
 </div>
 
 <script>
 function showPass(){
-  document.getElementById("lock").style.display="none";
-  document.getElementById("box").style.display="block";
+  document.getElementById("passBox").style.display="block";
 }
 
 function check(){
-  if(document.getElementById("pass").value === "arwa"){
-    document.getElementById("box").style.display="none";
-    document.getElementById("heartWrap").style.display="block";
+  if(document.getElementById("pass").value==="arwa"){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("scene1").style.display="block";
   }else{
     alert("كلمة السر غلط");
   }
+}
+
+function nextScene(){
+  document.getElementById("scene1").style.display="none";
+  document.getElementById("scene2").style.display="block";
 }
 </script>
 
