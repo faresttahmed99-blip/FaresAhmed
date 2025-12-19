@@ -1,92 +1,137 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>رسالة</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love</title>
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle, #ff9acb, #ff4f9a);
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      color: white;
-      text-align: center;
-    }
-
-    .page {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .page.active {
-      display: flex;
-    }
-
-    .text {
-      font-size: 26px;
-      line-height: 1.8;
-      min-height: 120px;
-      font-weight: bold;
-    }
-
-    button {
-      padding: 12px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 30px;
-      background: white;
-      color: #ff4f9a;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0,0,0,.3);
-      transition: .3s;
-    }
-
-    button:hover {
-      transform: scale(1.1);
-    }
-  </style>
+<style>
+*{
+  box-sizing:border-box;
+  font-family: 'Cairo', sans-serif;
+}
+body{
+  margin:0;
+  height:100vh;
+  background: linear-gradient(135deg,#f7a1a8,#fbc2c4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+.page{
+  display:none;
+  text-align:center;
+  width:100%;
+  padding:20px;
+}
+.page.active{
+  display:block;
+}
+.rose{
+  font-size:80px;
+  margin-top:40px;
+}
+.text{
+  color:white;
+  font-size:22px;
+  margin:20px 0;
+}
+.card{
+  background:white;
+  border-radius:20px;
+  padding:25px;
+  width:90%;
+  max-width:350px;
+  margin:auto;
+}
+input{
+  width:100%;
+  padding:12px;
+  border-radius:25px;
+  border:2px solid #f7a1a8;
+  outline:none;
+  text-align:center;
+  font-size:18px;
+}
+button{
+  margin-top:15px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:25px;
+  background:#ff6b8a;
+  color:white;
+  font-size:18px;
+}
+.hearts{
+  position:absolute;
+  bottom:-20px;
+  animation: float 6s linear infinite;
+  font-size:20px;
+}
+@keyframes float{
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-110vh);opacity:0;}
+}
+</style>
 </head>
 
 <body>
 
-  <!-- الصفحة الأولى -->
-  <div class="page active" id="page1">
-    <div class="text">بحبك يا أروى</div>
-    <button onclick="goNext()">Next</button>
-  </div>
+<!-- الصفحة الأولى -->
+<div class="page active" id="page1">
+  <div class="text">دوسي على الوردة</div>
+  <div class="rose" onclick="goTo(2)">🌹</div>
+</div>
 
-  <!-- الصفحة الثانية -->
-  <div class="page" id="page2">
-    <div class="text" id="typing"></div>
-    <button onclick="alert('لسه مكملين 😉')">Next</button>
+<!-- صفحة الباسورد -->
+<div class="page" id="page2">
+  <div class="card">
+    <h2 style="color:#ff6b8a">Enter Password 💌</h2>
+    <input type="password" id="pass" placeholder="•••">
+    <button onclick="check()">Unlock 💕</button>
   </div>
+</div>
+
+<!-- صفحة الرسالة -->
+<div class="page" id="page3">
+  <div class="card">
+    <p style="line-height:1.8">
+      من أول يوم عرفتك وأنا حاسس إن حياتي بقت أحلى،
+      ضحكتك بتخليني أنسى أي هم،
+      وكلامك بيديني طاقة وحب.
+      إنتي مش بس جزء من حياتي،
+      إنتي حياتي كلها.
+      بحبك من قلبي وهفضل أحبك طول العمر 💕
+    </p>
+    <button onclick="alert('خلصنا ❤️')">Next 💕</button>
+  </div>
+</div>
 
 <script>
-  function goNext() {
-    document.getElementById("page1").classList.remove("active");
-    document.getElementById("page2").classList.add("active");
-    startTyping();
-  }
+function goTo(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
 
-  const text = 
-  "يمكن ما بعرفش أعبّر صح…\nبس وجودك في حياتي فرق معايا";
-
-  let i = 0;
-  function startTyping() {
-    if (i < text.length) {
-      document.getElementById("typing").innerHTML += 
-        text.charAt(i) === "\n" ? "<br>" : text.charAt(i);
-      i++;
-      setTimeout(startTyping, 70);
-    }
+function check(){
+  if(document.getElementById('pass').value === '123'){
+    goTo(3);
+  }else{
+    alert('غلط 😅');
   }
+}
+
+// قلوب طايرة
+setInterval(()=>{
+  let h=document.createElement('div');
+  h.className='hearts';
+  h.innerHTML='❤️';
+  h.style.left=Math.random()*100+'%';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},500);
 </script>
 
 </body>
