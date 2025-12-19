@@ -111,7 +111,7 @@ audio{
   font-size:18px;
 }
 
-/* STORY IMAGES */
+/* STORY */
 .story{
   position:relative;
   width:100%;
@@ -144,7 +144,7 @@ audio{
   100%{transform:translateY(-110vh);opacity:0}
 }
 
-/* BOOM HEARTS */
+/* BOOM */
 @keyframes boom{
   to{
     transform:translate(
@@ -224,7 +224,7 @@ function check(){
   }
 }
 
-/* rose animation */
+/* rose */
 function roseClick(){
   const rose=document.getElementById("rose");
   rose.classList.add("animate");
@@ -257,7 +257,7 @@ setInterval(()=>{
   `We've been together for<br>${d} days ${h} hrs ${m} mins ${s} secs 💜`;
 },1000);
 
-/* story slider */
+/* STORY SLIDER */
 let idx=0;
 const imgs=document.querySelectorAll('.story-img');
 if(imgs.length>1){
@@ -268,7 +268,7 @@ if(imgs.length>1){
   },3000);
 }
 
-/* floating hearts */
+/* hearts */
 setInterval(()=>{
   let h=document.createElement("div");
   h.className="heart";
