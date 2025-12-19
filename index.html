@@ -2,62 +2,115 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>أروى ❤️</title>
+  <title>فارس ❤️ أروى</title>
+
   <style>
-    body {
-      background: pink;
-      text-align: center;
-      font-family: Arial;
-      direction: rtl;
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:radial-gradient(circle,#ffb6c1,#ff1493);
+      font-family:Arial;
+      direction:rtl;
+      overflow:hidden;
+      color:white;
     }
-    #content {
-      display: none;
+
+    /* شاشة الباسورد */
+    #lock{
+      text-align:center;
     }
-    .rose {
-      font-size: 80px;
-      cursor: pointer;
-      margin-top: 100px;
+    .rose{
+      font-size:80px;
+      cursor:pointer;
+      animation:glow 2s infinite alternate;
     }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
+    @keyframes glow{
+      from{ text-shadow:0 0 10px #fff; }
+      to{ text-shadow:0 0 30px #fff; }
     }
+    input,button{
+      padding:10px;
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      margin-top:10px;
+    }
+    button{ cursor:pointer; }
+
+    /* القلب */
+    #heartWrap{ display:none; }
+
+    .heart{
+      position:relative;
+      width:300px;
+      height:270px;
+      background:red;
+      transform:rotate(-45deg);
+      animation:pulse 2s infinite;
+      box-shadow:0 0 40px rgba(255,0,0,.7);
+    }
+    .heart:before,.heart:after{
+      content:"";
+      position:absolute;
+      width:300px;
+      height:270px;
+      background:red;
+      border-radius:50%;
+    }
+    .heart:before{ top:-150px; left:0; }
+    .heart:after{ left:150px; top:0; }
+
+    @keyframes pulse{
+      0%{ transform:rotate(-45deg) scale(1); }
+      50%{ transform:rotate(-45deg) scale(1.05); }
+      100%{ transform:rotate(-45deg) scale(1); }
+    }
+
+    .names{
+      position:absolute;
+      width:100%;
+      height:100%;
+      transform:rotate(45deg);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      font-size:28px;
+      font-weight:bold;
+      text-shadow:0 0 10px white;
+      animation:float 3s infinite alternate;
+    }
+    @keyframes float{
+      from{ transform:rotate(45deg) translateY(-10px); }
+      to{ transform:rotate(45deg) translateY(10px); }
+    }
+    .small{ font-size:20px; margin:8px 0; }
   </style>
 </head>
+
 <body>
 
-  <h2>اضغطي على الوردة 🌹</h2>
-
-  <div class="rose" onclick="showPassword()">🌹</div>
-
-  <div id="passwordBox" style="display:none;">
-    <p>اكتبي كلمة السر ❤️</p>
-    <input type="password" id="pass">
-    <br>
-    <button onclick="checkPass()">دخول</button>
+  <!-- الباسورد -->
+  <div id="lock">
+    <h2>اضغطي على الوردة 🌹</h2>
+    <div class="rose" onclick="showPass()">🌹</div>
+    <div id="box" style="display:none">
+      <p>كلمة السر ❤️</p>
+      <input type="password" id="pass">
+      <br>
+      <button onclick="check()">دخول</button>
+    </div>
   </div>
 
-  <div id="content">
-    <h1>أروى ❤️</h1>
-    <p>الصفحة دي معمولة ليكي مخصوص</p>
-  </div>
-
-  <script>
-    function showPassword() {
-      document.getElementById("passwordBox").style.display = "block";
-    }
-
-    function checkPass() {
-      var password = document.getElementById("pass").value;
-      if (password === "love") {
-        document.getElementById("content").style.display = "block";
-        document.getElementById("passwordBox").style.display = "none";
-      } else {
-        alert("كلمة السر غلط");
-      }
-    }
-  </script>
-
-</body>
-</html>
+  <!-- القلب -->
+  <div id="heartWrap">
+    <div class="heart">
+      <div class="names">
+        <div>فارس ❤️</div>
+        <div class="small">بيحب</div>
+        <div>أروى ❤️</div>
+      </div>
+    </div
