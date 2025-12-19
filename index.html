@@ -3,9 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <title>أروى ❤️</title>
+  <style>
+    body {
+      background: pink;
+      text-align: center;
+      font-family: Arial;
+      direction: rtl;
+    }
+    #content {
+      display: none;
+    }
+    .rose {
+      font-size: 80px;
+      cursor: pointer;
+      margin-top: 100px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
-<body style="background:pink;text-align:center;font-family:Arial;">
-  <h1>أروى ❤️</h1>
-  <p>الصفحة دي معمولالك مخصوص</p>
+<body>
+
+  <h2>اضغطي على الوردة 🌹</h2>
+
+  <div class="rose" onclick="showPassword()">🌹</div>
+
+  <div id="passwordBox" style="display:none;">
+    <p>اكتبي كلمة السر ❤️</p>
+    <input type="password" id="pass">
+    <br>
+    <button onclick="checkPass()">دخول</button>
+  </div>
+
+  <div id="content">
+    <h1>أروى ❤️</h1>
+    <p>الصفحة دي معمولة ليكي مخصوص</p>
+  </div>
+
+  <script>
+    function showPassword() {
+      document.getElementById("passwordBox").style.display = "block";
+    }
+
+    function checkPass() {
+      var password = document.getElementById("pass").value;
+      if (password === "love") {
+        document.getElementById("content").style.display = "block";
+        document.getElementById("passwordBox").style.display = "none";
+      } else {
+        alert("كلمة السر غلط");
+      }
+    }
+  </script>
+
 </body>
 </html>
