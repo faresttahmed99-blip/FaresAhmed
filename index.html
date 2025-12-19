@@ -8,7 +8,7 @@
 <style>
 *{
   box-sizing:border-box;
-  font-family:'Cairo',sans-serif;
+  font-family:Arial, sans-serif;
 }
 body{
   margin:0;
@@ -21,19 +21,26 @@ body{
 }
 .page{
   display:none;
-  text-align:center;
   width:100%;
   padding:20px;
+  text-align:center;
 }
 .page.active{display:block;}
 
-.rose{font-size:80px;margin-top:40px}
-.text{color:white;font-size:22px;margin:20px 0}
+.text{
+  color:white;
+  font-size:22px;
+  margin-bottom:20px;
+}
+.rose{
+  font-size:80px;
+  cursor:pointer;
+}
 
 .card{
   background:white;
   border-radius:20px;
-  padding:25px;
+  padding:20px;
   width:90%;
   max-width:360px;
   margin:auto;
@@ -44,7 +51,6 @@ input{
   padding:12px;
   border-radius:25px;
   border:2px solid #f7a1a8;
-  outline:none;
   text-align:center;
   font-size:18px;
 }
@@ -60,7 +66,7 @@ button{
   font-size:18px;
 }
 
-/* slider */
+/* صورة واحدة */
 .slider{
   width:100%;
   overflow:hidden;
@@ -69,22 +75,15 @@ button{
 }
 .slides{
   display:flex;
-  width:300%;
-  animation:slide 12s infinite;
+  width:100%;
 }
 .slides img{
   width:100%;
   object-fit:cover;
 }
 
-@keyframes slide{
-  0%{transform:translateX(0)}
-  33%{transform:translateX(-100%)}
-  66%{transform:translateX(-200%)}
-  100%{transform:translateX(0)}
-}
-
-.hearts{
+/* قلوب */
+.heart{
   position:absolute;
   bottom:-20px;
   animation:float 6s linear infinite;
@@ -98,50 +97,47 @@ button{
 
 <body>
 
-<!-- PAGE 1 -->
+<!-- Page 1 -->
 <div class="page active" id="page1">
   <div class="text">دوسي على الوردة</div>
   <div class="rose" onclick="goTo(2)">🌹</div>
 </div>
 
-<!-- PAGE 2 -->
+<!-- Page 2 -->
 <div class="page" id="page2">
   <div class="card">
-    <h2 style="color:#ff6b8a">Enter Password 💌</h2>
+    <h3 style="color:#ff6b8a">Enter Password 💌</h3>
     <input type="password" id="pass" placeholder="•••">
     <button onclick="check()">Unlock 💕</button>
   </div>
 </div>
 
-<!-- PAGE 3 -->
+<!-- Page 3 -->
 <div class="page" id="page3">
   <div class="card">
     <p style="line-height:1.8">
       من أول يوم عرفتك وأنا حاسس إن حياتي بقت أحلى،
-      ضحكتك بتخليني أنسى أي هم،
-      وكلامك بيديني طاقة وحب.
-      إنتي حياتي كلها.
-      بحبك وهفضل أحبك طول العمر 💕
+      وجودك فرق معايا في كل حاجة،
+      وأنا مبسوط إنك في حياتي.
+      بحبك 💕
     </p>
     <button onclick="goTo(4)">Next 💕</button>
   </div>
 </div>
 
-<!-- PAGE 4 -->
+<!-- Page 4 -->
 <div class="page" id="page4">
   <div class="card" style="background:#7b4db8;color:white">
 
-    <h2>Our Memories 💜</h2>
+    <h3>Our Memories 💜</h3>
 
-    <audio controls style="width:100%;margin-bottom:10px">
-      <source src="mosh-gede.mp3" type="audio/mpeg">
+    <audio controls style="width:100%">
+      <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <div class="slider">
       <div class="slides">
         <img src="1.jpg">
-        <img src="2.jpg">
-        <img src="3.jpg">
       </div>
     </div>
 
@@ -169,25 +165,26 @@ function check(){
 const startDate = new Date("2022-01-01T00:00:00"); // عدل التاريخ
 setInterval(()=>{
   const now = new Date();
-  let diff = Math.floor((now-startDate)/1000);
-  let d=Math.floor(diff/86400); diff%=86400;
-  let h=Math.floor(diff/3600); diff%=3600;
-  let m=Math.floor(diff/60);
-  let s=diff%60;
+  let diff = Math.floor((now - startDate)/1000);
 
-  document.getElementById("counter").innerHTML=
-  `We've been together for<br>${d} days, ${h} hrs, ${m} mins, ${s} secs 💜`;
+  let d = Math.floor(diff/86400); diff%=86400;
+  let h = Math.floor(diff/3600); diff%=3600;
+  let m = Math.floor(diff/60);
+  let s = diff%60;
+
+  document.getElementById("counter").innerHTML =
+    `We've been together for<br>${d} days ${h} hrs ${m} mins ${s} secs 💜`;
 },1000);
 
 /* hearts */
 setInterval(()=>{
-  let h=document.createElement('div');
-  h.className='hearts';
-  h.innerHTML='❤️';
-  h.style.left=Math.random()*100+'%';
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"%";
   document.body.appendChild(h);
   setTimeout(()=>h.remove(),6000);
-},600);
+},700);
 </script>
 
 </body>
