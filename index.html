@@ -11,38 +11,33 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background: radial-gradient(circle,#ff9acb,#ff4fa3);
-  font-family: Arial;
-  direction: rtl;
-  text-align:center;
+  background:radial-gradient(circle,#ff9acb,#ff4f9a);
+  font-family:Arial;
+  direction:rtl;
   color:white;
+  text-align:center;
 }
 
-/* إخفاء المشاهد */
-.scene{display:none;}
-
-/* الوردة */
-.rose{
-  font-size:70px;
-  cursor:pointer;
-  animation:pulse 1.5s infinite;
+/* الصفحات */
+.page{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+}
+.page.active{
+  display:flex;
 }
 
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.2)}
-  100%{transform:scale(1)}
-}
-
-/* الكتابة */
+/* الكلام */
 .type{
-  font-size:32px;
-  min-height:60px;
+  font-size:28px;
+  font-weight:bold;
+  min-height:80px;
 }
 
-/* زرار Next */
+/* زر Next */
 button{
-  margin-top:30px;
   padding:10px 25px;
   font-size:18px;
   border:none;
@@ -51,69 +46,95 @@ button{
   color:#ff4fa3;
   cursor:pointer;
 }
+
+/* الفيديو */
+.video-wrap{
+  position:relative;
+  width:90%;
+  max-width:420px;
+}
+
+video{
+  width:100%;
+  border-radius:20px;
+}
+
+/* الكلام فوق الفيديو */
+.overlay{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:90%;
+  font-size:22px;
+  font-weight:bold;
+  line-height:1.6;
+  text-shadow:0 0 12px rgba(0,0,0,.9);
+  pointer-events:none;
+  animation:fadeIn 1.5s;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
 </style>
 </head>
 
 <body>
 
-<!-- موسيقى -->
-<audio id="music" src="music.mp3" loop></audio>
+<!-- الصفحة الأولى -->
+<div class="page active" id="page1">
+  <div class="type">بحبك يا أروى</div>
+  <button onclick="go(2)">Next</button>
+</div>
 
-<!-- شاشة القفل -->
-<div id="lock">
-  <p>اضغطي على الوردة 🌹</p>
-  <div class="rose" onclick="showPass()">🌹</div>
+<!-- الصفحة الثانية (فيديو + كلام عليه) -->
+<div class="page" id="page2">
+  <div class="video-wrap">
+    <video controls autoplay>
+      <!-- ✏️ غيّر اسم الفيديو لو مختلف -->
+      <source src="video.mp4" type="video/mp4">
+      المتصفح لا يدعم الفيديو
+    </video>
 
-  <div id="passBox" style="display:none;">
-    <p>كلمة السر</p>
-    <input type="password" id="pass">
-    <br><br>
-    <button onclick="checkPass()">دخول</button>
+    <!-- الكلام الرومانسي -->
+    <div class="overlay">
+      مش وعد ولا كلام كبير<br>
+      بس إحساس حقيقي<br>
+      وأنا مبسوط إنك في حياتي
+    </div>
   </div>
+
+  <button onclick="go(3)">Next</button>
 </div>
 
-<!-- المشهد الأول -->
-<div id="scene1" class="scene">
-  <div id="text1" class="type"></div>
-  <button onclick="next()">Next</button>
-</div>
-
-<!-- المشهد الثاني -->
-<div id="scene2" class="scene">
-  <div id="text2" class="type"></div>
+<!-- الصفحة الثالثة -->
+<div class="page" id="page3">
+  <div class="type" id="typing"></div>
 </div>
 
 <script>
-function showPass(){
-  document.getElementById("passBox").style.display="block";
-}
+function go(n){
+  document.querySelectorAll('.page')
+    .forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n)
+    .classList.add('active');
 
-function checkPass(){
-  if(document.getElementById("pass").value==="arwa"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("scene1").style.display="block";
-    document.getElementById("music").play();
-    typeText("بحبك يا أروى","text1");
-  }else{
-    alert("كلمة السر غلط");
+  if(n===3){
+    typeText("يمكن ما بعرفش أعبّر صح… بس وجودك في حياتي فرق معايا");
   }
 }
 
-function next(){
-  document.getElementById("scene1").style.display="none";
-  document.getElementById("scene2").style.display="block";
-  typeText("أول ما شوفتك حبيتك... والكلام كله من القلب","text2");
-}
-
-function typeText(text,id){
+function typeText(text){
   let i=0;
-  let el=document.getElementById(id);
+  const el=document.getElementById("typing");
   el.innerHTML="";
-  let interval=setInterval(()=>{
+  const t=setInterval(()=>{
     el.innerHTML+=text.charAt(i);
     i++;
-    if(i>=text.length) clearInterval(interval);
-  },100);
+    if(i>=text.length) clearInterval(t);
+  },90);
 }
 </script>
 
