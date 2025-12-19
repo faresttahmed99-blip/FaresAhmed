@@ -26,17 +26,22 @@ body{
 }
 .page.active{display:block}
 
-/* الصفحة الأولى */
+/* ========== PAGE 1 ========== */
 .start{
   text-align:center;
   color:white;
 }
-.start .rose{
+.rose{
   font-size:90px;
   cursor:pointer;
+  transition:transform .6s ease, opacity .6s ease;
+}
+.rose.animate{
+  transform:scale(3) rotate(25deg);
+  opacity:0;
 }
 
-/* الكارت */
+/* ========== CARD ========== */
 .card{
   background:white;
   border-radius:25px;
@@ -46,8 +51,6 @@ body{
   margin:auto;
   text-align:center;
 }
-
-/* inputs */
 input{
   width:100%;
   padding:12px;
@@ -67,7 +70,16 @@ button{
   font-size:18px;
 }
 
-/* memories page */
+/* ========== MESSAGE ANIMATION ========== */
+.message{
+  animation:showMsg .9s ease;
+}
+@keyframes showMsg{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ========== MEMORIES PAGE ========== */
 .memories{
   width:95%;
   max-width:420px;
@@ -77,17 +89,13 @@ button{
   color:white;
   text-align:center;
 }
-
 .memories h2{
   font-family:cursive;
-  margin-bottom:10px;
 }
-
 audio{
   width:100%;
-  margin-bottom:12px;
+  margin:10px 0;
 }
-
 .main-img{
   width:100%;
   height:55vh;
@@ -95,13 +103,11 @@ audio{
   border-radius:20px;
   margin-bottom:10px;
 }
-
 .counter{
   font-family:cursive;
   font-size:15px;
   margin:10px 0;
 }
-
 .next-btn{
   background:#5e2ea5;
   border:none;
@@ -112,7 +118,7 @@ audio{
   font-size:18px;
 }
 
-/* قلوب */
+/* ========== HEARTS ========== */
 .heart{
   position:absolute;
   bottom:-20px;
@@ -122,20 +128,31 @@ audio{
   0%{transform:translateY(0);opacity:1}
   100%{transform:translateY(-110vh);opacity:0}
 }
+
+/* ========== BOOM HEARTS ========== */
+@keyframes boom{
+  to{
+    transform:translate(
+      calc(-50% + 120px),
+      calc(-50% - 120px)
+    );
+    opacity:0;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<!-- Page 1 -->
+<!-- PAGE 1 -->
 <div class="page active" id="page1">
   <div class="start">
     <p>دوسي على الوردة</p>
-    <div class="rose" onclick="goTo(2)">🌹</div>
+    <div class="rose" id="rose" onclick="roseClick()">🌹</div>
   </div>
 </div>
 
-<!-- Page 2 -->
+<!-- PAGE 2 -->
 <div class="page" id="page2">
   <div class="card">
     <h3 style="color:#7b4db8">Enter Password 💌</h3>
@@ -144,9 +161,9 @@ audio{
   </div>
 </div>
 
-<!-- Page 3 -->
+<!-- PAGE 3 -->
 <div class="page" id="page3">
-  <div class="card">
+  <div class="card message">
     <p style="line-height:1.8">
       من أول يوم عرفتك وأنا حاسس إن حياتي بقت أحلى،
       وجودك فرق معايا في كل حاجة،
@@ -157,10 +174,9 @@ audio{
   </div>
 </div>
 
-<!-- Page 4 -->
+<!-- PAGE 4 -->
 <div class="page" id="page4">
   <div class="memories">
-
     <h2>Pov : Memories 💞</h2>
 
     <audio controls>
@@ -172,7 +188,6 @@ audio{
     <p class="counter" id="counter"></p>
 
     <button class="next-btn">Next 💕</button>
-
   </div>
 </div>
 
@@ -190,22 +205,41 @@ function check(){
   }
 }
 
+/* 🌹 rose animation */
+function roseClick(){
+  const rose=document.getElementById("rose");
+  rose.classList.add("animate");
+
+  for(let i=0;i<15;i++){
+    let h=document.createElement("div");
+    h.innerHTML="💖";
+    h.style.position="absolute";
+    h.style.left="50%";
+    h.style.top="50%";
+    h.style.fontSize="20px";
+    h.style.transform="translate(-50%,-50%)";
+    h.style.animation="boom 1s ease forwards";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1000);
+  }
+
+  setTimeout(()=>goTo(2),700);
+}
+
 /* counter */
-const startDate = new Date("2022-01-01T00:00:00"); // عدل التاريخ
+const startDate = new Date("2022-01-01T00:00:00");
 setInterval(()=>{
-  const now = new Date();
-  let diff = Math.floor((now - startDate)/1000);
-
-  let d = Math.floor(diff/86400); diff%=86400;
-  let h = Math.floor(diff/3600); diff%=3600;
-  let m = Math.floor(diff/60);
-  let s = diff%60;
-
-  document.getElementById("counter").innerHTML =
-    `We've been together for<br>${d} days ${h} hrs ${m} mins ${s} secs 💜`;
+  const now=new Date();
+  let diff=Math.floor((now-startDate)/1000);
+  let d=Math.floor(diff/86400); diff%=86400;
+  let h=Math.floor(diff/3600); diff%=3600;
+  let m=Math.floor(diff/60);
+  let s=diff%60;
+  document.getElementById("counter").innerHTML=
+  `We've been together for<br>${d} days ${h} hrs ${m} mins ${s} secs 💜`;
 },1000);
 
-/* hearts */
+/* floating hearts */
 setInterval(()=>{
   let h=document.createElement("div");
   h.className="heart";
@@ -213,7 +247,7 @@ setInterval(()=>{
   h.style.left=Math.random()*100+"%";
   document.body.appendChild(h);
   setTimeout(()=>h.remove(),6000);
-},800);
+},900);
 </script>
 
 </body>
