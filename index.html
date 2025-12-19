@@ -2,123 +2,130 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>❤️</title>
+<title>💗</title>
 
 <style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background: radial-gradient(circle, #ff9acb, #ff4f9a);
-  font-family: Arial;
-  direction: rtl;
-  color:white;
-  text-align:center;
-}
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #ff9acb, #ff4fa3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    color: white;
+    text-align: center;
+  }
 
-/* زرار */
-button{
-  padding:12px 30px;
-  font-size:18px;
-  border:none;
-  border-radius:30px;
-  background: linear-gradient(45deg,#ff0066,#ff66a3);
-  color:white;
-  cursor:pointer;
-  box-shadow:0 5px 15px rgba(0,0,0,.3);
-  transition:.3s;
-}
-button:hover{
-  transform:scale(1.1);
-}
+  .scene { display: none; }
 
-/* شاشة */
-.scene{ display:none; }
+  .rose {
+    font-size: 90px;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+  }
 
-/* وردة */
-.rose{
-  font-size:70px;
-  cursor:pointer;
-  animation:pulse 1.5s infinite;
-}
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.2)}
-  100%{transform:scale(1)}
-}
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
 
-/* كتابة */
-.type{
-  font-size:28px;
-  font-weight:bold;
-}
+  input {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 12px 35px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff0066, #ff66a3);
+    color: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,.3);
+    transition: .3s;
+  }
+
+  button:hover { transform: scale(1.1); }
+
+  .text {
+    font-size: 40px;
+    min-height: 60px;
+  }
 </style>
 </head>
 
 <body>
 
-<!-- موسيقى -->
+<!-- 🎵 الموسيقى -->
 <audio id="music" loop>
-  <source src="song.mp3" type="audio/mpeg">
+  <source src="8075373632_tk (1).mp3" type="audio/mpeg">
 </audio>
 
-<!-- قفل -->
+<!-- 🔒 الشاشة الأولى -->
 <div id="lock">
-  <p>اضغطي على الوردة 🌹</p>
+  <p>اضغطي هنا</p>
   <div class="rose" onclick="showPass()">🌹</div>
 
   <div id="passBox" style="display:none">
     <p>كلمة السر</p>
     <input type="password" id="pass">
-    <br><br>
-    <button onclick="check()">دخول</button>
+    <br>
+    <button onclick="checkPass()">دخول</button>
   </div>
 </div>
 
-<!-- مشهد 1 -->
+<!-- 💬 الشاشة التانية -->
 <div id="scene1" class="scene">
-  <button onclick="nextScene()">Next ✨</button>
+  <div class="text" id="typing"></div>
+  <button onclick="next()">Next</button>
 </div>
 
-<!-- مشهد 2 -->
+<!-- 💌 الشاشة التالتة -->
 <div id="scene2" class="scene">
-  <div class="type" id="text"></div>
+  <div class="text" id="finalText"></div>
 </div>
 
 <script>
-const message = "بحبك يا أروى";
-
-function showPass(){
-  document.getElementById("passBox").style.display="block";
-}
-
-function check(){
-  if(document.getElementById("pass").value==="arwa"){
-    document.getElementById("lock").style.display="none";
-    document.getElementById("scene1").style.display="block";
-    document.getElementById("music").play();
-  }else{
-    alert("كلمة السر غلط");
+  function showPass() {
+    document.getElementById("passBox").style.display = "block";
   }
-}
 
-function nextScene(){
-  document.getElementById("scene1").style.display="none";
-  document.getElementById("scene2").style.display="block";
-  typeWriter();
-}
-
-let i=0;
-function typeWriter(){
-  if(i < message.length){
-    document.getElementById("text").innerHTML += message.charAt(i);
-    i++;
-    setTimeout(typeWriter, 150);
+  function checkPass() {
+    if (document.getElementById("pass").value === "arwa") {
+      document.getElementById("lock").style.display = "none";
+      document.getElementById("scene1").style.display = "block";
+      document.getElementById("music").play();
+      typeText("بحبك يا أروى");
+    } else {
+      alert("كلمة السر غلط");
+    }
   }
-}
+
+  function typeText(text, elementId = "typing", speed = 120) {
+    let i = 0;
+    const el = document.getElementById(elementId);
+    el.innerHTML = "";
+    const interval = setInterval(() => {
+      el.innerHTML += text.charAt(i);
+      i++;
+      if (i === text.length) clearInterval(interval);
+    }, speed);
+  }
+
+  function next() {
+    document.getElementById("scene1").style.display = "none";
+    document.getElementById("scene2").style.display = "block";
+    typeText("أول ما شوفتك حسيت إن قلبي اختارك من غير تفكير ❤️", "finalText", 90);
+  }
 </script>
 
 </body>
-</html>
+    </html>
