@@ -1,141 +1,92 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>رسالة</title>
+  <meta charset="UTF-8">
+  <title>رسالة</title>
 
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:radial-gradient(circle,#ff9acb,#ff4f9a);
-  font-family:Arial;
-  direction:rtl;
-  color:white;
-  text-align:center;
-}
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #ff9acb, #ff4f9a);
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      color: white;
+      text-align: center;
+    }
 
-/* الصفحات */
-.page{
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  gap:20px;
-}
-.page.active{
-  display:flex;
-}
+    .page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
 
-/* الكلام */
-.type{
-  font-size:28px;
-  font-weight:bold;
-  min-height:80px;
-}
+    .page.active {
+      display: flex;
+    }
 
-/* زر Next */
-button{
-  padding:10px 25px;
-  font-size:18px;
-  border:none;
-  border-radius:10px;
-  background:white;
-  color:#ff4fa3;
-  cursor:pointer;
-}
+    .text {
+      font-size: 26px;
+      line-height: 1.8;
+      min-height: 120px;
+      font-weight: bold;
+    }
 
-/* الفيديو */
-.video-wrap{
-  position:relative;
-  width:90%;
-  max-width:420px;
-}
+    button {
+      padding: 12px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      background: white;
+      color: #ff4f9a;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,.3);
+      transition: .3s;
+    }
 
-video{
-  width:100%;
-  border-radius:20px;
-}
-
-/* الكلام فوق الفيديو */
-.overlay{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:90%;
-  font-size:22px;
-  font-weight:bold;
-  line-height:1.6;
-  text-shadow:0 0 12px rgba(0,0,0,.9);
-  pointer-events:none;
-  animation:fadeIn 1.5s;
-}
-
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-</style>
+    button:hover {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- الصفحة الأولى -->
-<div class="page active" id="page1">
-  <div class="type">بحبك يا أروى</div>
-  <button onclick="go(2)">Next</button>
-</div>
-
-<!-- الصفحة الثانية (فيديو + كلام عليه) -->
-<div class="page" id="page2">
-  <div class="video-wrap">
-    <video controls autoplay>
-      <!-- ✏️ غيّر اسم الفيديو لو مختلف -->
-      <source src="video.mp4" type="video/mp4">
-      المتصفح لا يدعم الفيديو
-    </video>
-
-    <!-- الكلام الرومانسي -->
-    <div class="overlay">
-      مش وعد ولا كلام كبير<br>
-      بس إحساس حقيقي<br>
-      وأنا مبسوط إنك في حياتي
-    </div>
+  <!-- الصفحة الأولى -->
+  <div class="page active" id="page1">
+    <div class="text">بحبك يا أروى</div>
+    <button onclick="goNext()">Next</button>
   </div>
 
-  <button onclick="go(3)">Next</button>
-</div>
-
-<!-- الصفحة الثالثة -->
-<div class="page" id="page3">
-  <div class="type" id="typing"></div>
-</div>
+  <!-- الصفحة الثانية -->
+  <div class="page" id="page2">
+    <div class="text" id="typing"></div>
+    <button onclick="alert('لسه مكملين 😉')">Next</button>
+  </div>
 
 <script>
-function go(n){
-  document.querySelectorAll('.page')
-    .forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n)
-    .classList.add('active');
-
-  if(n===3){
-    typeText("يمكن ما بعرفش أعبّر صح… بس وجودك في حياتي فرق معايا");
+  function goNext() {
+    document.getElementById("page1").classList.remove("active");
+    document.getElementById("page2").classList.add("active");
+    startTyping();
   }
-}
 
-function typeText(text){
-  let i=0;
-  const el=document.getElementById("typing");
-  el.innerHTML="";
-  const t=setInterval(()=>{
-    el.innerHTML+=text.charAt(i);
-    i++;
-    if(i>=text.length) clearInterval(t);
-  },90);
-}
+  const text = 
+  "يمكن ما بعرفش أعبّر صح…\nبس وجودك في حياتي فرق معايا";
+
+  let i = 0;
+  function startTyping() {
+    if (i < text.length) {
+      document.getElementById("typing").innerHTML += 
+        text.charAt(i) === "\n" ? "<br>" : text.charAt(i);
+      i++;
+      setTimeout(startTyping, 70);
+    }
+  }
 </script>
 
 </body>
