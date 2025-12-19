@@ -2,130 +2,120 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>💗</title>
+<title>رسالة</title>
 
 <style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle, #ff9acb, #ff4fa3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    direction: rtl;
-    color: white;
-    text-align: center;
-  }
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: radial-gradient(circle,#ff9acb,#ff4fa3);
+  font-family: Arial;
+  direction: rtl;
+  text-align:center;
+  color:white;
+}
 
-  .scene { display: none; }
+/* إخفاء المشاهد */
+.scene{display:none;}
 
-  .rose {
-    font-size: 90px;
-    cursor: pointer;
-    animation: pulse 1.5s infinite;
-  }
+/* الوردة */
+.rose{
+  font-size:70px;
+  cursor:pointer;
+  animation:pulse 1.5s infinite;
+}
 
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-  }
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.2)}
+  100%{transform:scale(1)}
+}
 
-  input {
-    padding: 10px;
-    font-size: 18px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 10px;
-  }
+/* الكتابة */
+.type{
+  font-size:32px;
+  min-height:60px;
+}
 
-  button {
-    margin-top: 20px;
-    padding: 12px 35px;
-    font-size: 18px;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(45deg, #ff0066, #ff66a3);
-    color: white;
-    box-shadow: 0 5px 15px rgba(0,0,0,.3);
-    transition: .3s;
-  }
-
-  button:hover { transform: scale(1.1); }
-
-  .text {
-    font-size: 40px;
-    min-height: 60px;
-  }
+/* زرار Next */
+button{
+  margin-top:30px;
+  padding:10px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:white;
+  color:#ff4fa3;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 الموسيقى -->
-<audio id="music" loop>
-  <source src="8075373632_tk (1).mp3" type="audio/mpeg">
-</audio>
+<!-- موسيقى -->
+<audio id="music" src="music.mp3" loop></audio>
 
-<!-- 🔒 الشاشة الأولى -->
+<!-- شاشة القفل -->
 <div id="lock">
-  <p>اضغطي هنا</p>
+  <p>اضغطي على الوردة 🌹</p>
   <div class="rose" onclick="showPass()">🌹</div>
 
-  <div id="passBox" style="display:none">
+  <div id="passBox" style="display:none;">
     <p>كلمة السر</p>
     <input type="password" id="pass">
-    <br>
+    <br><br>
     <button onclick="checkPass()">دخول</button>
   </div>
 </div>
 
-<!-- 💬 الشاشة التانية -->
+<!-- المشهد الأول -->
 <div id="scene1" class="scene">
-  <div class="text" id="typing"></div>
+  <div id="text1" class="type"></div>
   <button onclick="next()">Next</button>
 </div>
 
-<!-- 💌 الشاشة التالتة -->
+<!-- المشهد الثاني -->
 <div id="scene2" class="scene">
-  <div class="text" id="finalText"></div>
+  <div id="text2" class="type"></div>
 </div>
 
 <script>
-  function showPass() {
-    document.getElementById("passBox").style.display = "block";
-  }
+function showPass(){
+  document.getElementById("passBox").style.display="block";
+}
 
-  function checkPass() {
-    if (document.getElementById("pass").value === "arwa") {
-      document.getElementById("lock").style.display = "none";
-      document.getElementById("scene1").style.display = "block";
-      document.getElementById("music").play();
-      typeText("بحبك يا أروى");
-    } else {
-      alert("كلمة السر غلط");
-    }
+function checkPass(){
+  if(document.getElementById("pass").value==="arwa"){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("scene1").style.display="block";
+    document.getElementById("music").play();
+    typeText("بحبك يا أروى","text1");
+  }else{
+    alert("كلمة السر غلط");
   }
+}
 
-  function typeText(text, elementId = "typing", speed = 120) {
-    let i = 0;
-    const el = document.getElementById(elementId);
-    el.innerHTML = "";
-    const interval = setInterval(() => {
-      el.innerHTML += text.charAt(i);
-      i++;
-      if (i === text.length) clearInterval(interval);
-    }, speed);
-  }
+function next(){
+  document.getElementById("scene1").style.display="none";
+  document.getElementById("scene2").style.display="block";
+  typeText("أول ما شوفتك حبيتك... والكلام كله من القلب","text2");
+}
 
-  function next() {
-    document.getElementById("scene1").style.display = "none";
-    document.getElementById("scene2").style.display = "block";
-    typeText("أول ما شوفتك حسيت إن قلبي اختارك من غير تفكير ❤️", "finalText", 90);
-  }
+function typeText(text,id){
+  let i=0;
+  let el=document.getElementById(id);
+  el.innerHTML="";
+  let interval=setInterval(()=>{
+    el.innerHTML+=text.charAt(i);
+    i++;
+    if(i>=text.length) clearInterval(interval);
+  },100);
+}
 </script>
 
 </body>
-    </html>
+</html>
