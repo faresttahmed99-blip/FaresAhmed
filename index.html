@@ -70,7 +70,7 @@ button{
   font-size:18px;
 }
 
-/* MESSAGE */
+/* MESSAGE ANIMATION */
 .message{
   animation:showMsg .9s ease;
 }
@@ -133,7 +133,7 @@ audio{
   opacity:1;
 }
 
-/* FLOATING HEARTS */
+/* HEARTS */
 .heart{
   position:absolute;
   bottom:-20px;
@@ -185,6 +185,16 @@ audio{
       وأنا مبسوط إنك في حياتي.
       بحبك 💕
     </p>
+    <button onclick="goTo(35)">Next 💕</button>
+  </div>
+</div>
+
+<!-- PAGE 3.5 -->
+<div class="page" id="page35">
+  <div class="card message">
+    <h2 style="font-family:cursive; font-size:26px;">
+      بحبك يا أروي 💖
+    </h2>
     <button onclick="goTo(4)">Next 💕</button>
   </div>
 </div>
@@ -224,7 +234,7 @@ function check(){
   }
 }
 
-/* rose */
+/* rose animation */
 function roseClick(){
   const rose=document.getElementById("rose");
   rose.classList.add("animate");
@@ -257,7 +267,7 @@ setInterval(()=>{
   `We've been together for<br>${d} days ${h} hrs ${m} mins ${s} secs 💜`;
 },1000);
 
-/* STORY SLIDER */
+/* story slider */
 let idx=0;
 const imgs=document.querySelectorAll('.story-img');
 if(imgs.length>1){
@@ -268,7 +278,7 @@ if(imgs.length>1){
   },3000);
 }
 
-/* hearts */
+/* floating hearts */
 setInterval(()=>{
   let h=document.createElement("div");
   h.className="heart";
