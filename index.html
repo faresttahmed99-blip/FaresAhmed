@@ -70,7 +70,7 @@ button{
   font-size:18px;
 }
 
-/* MESSAGE ANIMATION */
+/* MESSAGE */
 .message{
   animation:showMsg .9s ease;
 }
@@ -133,6 +133,16 @@ audio{
   opacity:1;
 }
 
+/* COUNT NUMBER */
+.count-num{
+  font-size:52px;
+  margin-top:20px;
+  color:#ff6b8a;
+  opacity:0;
+  transform:scale(0.5);
+  transition:opacity .6s ease, transform .6s ease;
+}
+
 /* HEARTS */
 .heart{
   position:absolute;
@@ -185,17 +195,17 @@ audio{
       وأنا مبسوط إنك في حياتي.
       بحبك 💕
     </p>
-    <button onclick="goTo(35)">Next 💕</button>
+    <button onclick="goTo(35); setTimeout(showNumbers,300)">Next 💕</button>
   </div>
 </div>
 
 <!-- PAGE 3.5 -->
 <div class="page" id="page35">
   <div class="card message">
-    <h2 style="font-family:cursive; font-size:26px;">
+    <h2 style="font-family:cursive;font-size:26px;">
       بحبك يا أروي 💖
     </h2>
-    <button onclick="goTo(4)">Next 💕</button>
+    <div id="countNum" class="count-num">1</div>
   </div>
 </div>
 
@@ -234,7 +244,7 @@ function check(){
   }
 }
 
-/* rose animation */
+/* rose */
 function roseClick(){
   const rose=document.getElementById("rose");
   rose.classList.add("animate");
@@ -254,8 +264,38 @@ function roseClick(){
   setTimeout(()=>goTo(2),700);
 }
 
+/* zoom fade numbers */
+function showNumbers(){
+  const nums=[1,2,3];
+  const el=document.getElementById("countNum");
+  let i=0;
+
+  function next(){
+    if(i>=nums.length){
+      goTo(4);
+      return;
+    }
+    el.textContent=nums[i];
+    el.style.opacity=0;
+    el.style.transform="scale(0.5)";
+
+    setTimeout(()=>{
+      el.style.opacity=1;
+      el.style.transform="scale(1.3)";
+    },100);
+
+    setTimeout(()=>{
+      el.style.opacity=0;
+      el.style.transform="scale(0.5)";
+      i++;
+      setTimeout(next,500);
+    },900);
+  }
+  next();
+}
+
 /* counter */
-const startDate = new Date("2022-01-01T00:00:00");
+const startDate=new Date("2022-01-01T00:00:00");
 setInterval(()=>{
   const now=new Date();
   let diff=Math.floor((now-startDate)/1000);
