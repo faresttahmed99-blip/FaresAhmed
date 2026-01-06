@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Farida</title>
-</head>
-
-<body style="margin:0;background:black;overflow:hidden;">
-
 <script>
-  // إنشاء الكلمة
+  // إعداد الشاشة
+  document.body.style.margin = "0";
+  document.body.style.background = "black";
+  document.body.style.overflow = "hidden";
+
+  // الكلمة
   const word = document.createElement("div");
   word.innerText = "Farida";
-
   word.style.position = "absolute";
   word.style.top = "40%";
   word.style.left = "50%";
@@ -21,16 +15,80 @@
   word.style.fontSize = "16vw";
   word.style.fontWeight = "600";
   word.style.userSelect = "none";
-
   document.body.appendChild(word);
 
-  // حركة السقوط
+  // Canvas للرماد
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  document.body.appendChild(canvas);
+
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
   let y = 0;
-  setInterval(() => {
+  let particles = [];
+  let stage = "fall";
+
+  // السقوط
+  const fall = setInterval(() => {
+    if (stage !== "fall") return;
     y += 3;
     word.style.transform = `translate(-50%, ${y}px)`;
-  }, 16);
-</script>
 
-</body>
-</html>
+    if (y > 200) {
+      stage = "ash";
+      word.style.display = "none";
+      createAsh();
+    }
+  }, 16);
+
+  // إنشاء الرماد
+  function createAsh() {
+    for (let i = 0; i < 400; i++) {
+      particles.push({
+        x: innerWidth / 2,
+        y: innerHeight / 2,
+        vx: (Math.random() - 0.5) * 6,
+        vy: (Math.random() - 0.5) * 6
+      });
+    }
+    setTimeout(formHeart, 1500);
+  }
+
+  // تكوين القلب
+  function formHeart() {
+    particles.forEach((p, i) => {
+      const t = (i / particles.length) * Math.PI * 2;
+      p.tx = innerWidth / 2 + 16 * Math.pow(Math.sin(t), 3) * 10;
+      p.ty =
+        innerHeight / 2 -
+        (13 * Math.cos(t) -
+          5 * Math.cos(2 * t) -
+          2 * Math.cos(3 * t) -
+          Math.cos(4 * t)) *
+          10;
+    });
+    stage = "heart";
+  }
+
+  // الرسم
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      if (stage === "ash") {
+        p.x += p.vx;
+        p.y += p.vy;
+      } else if (stage === "heart") {
+        p.x += (p.tx - p.x) * 0.05;
+        p.y += (p.ty - p.y) * 0.05;
+      }
+      ctx.fillStyle = stage === "heart" ? "red" : "white";
+      ctx.fillRect(p.x, p.y, 2, 2);
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+         </script>
