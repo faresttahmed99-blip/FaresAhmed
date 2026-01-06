@@ -1,94 +1,18 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <title>لو قريتي ده</title>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #f6f1eb, #fbeaea);
-      font-family: 'Cairo', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .card {
-      background: white;
-      padding: 40px;
-      max-width: 500px;
-      text-align: center;
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-      animation: fadeIn 1.5s ease;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      font-size: 28px;
-      color: #333;
-    }
-
-    p {
-      font-size: 18px;
-      line-height: 1.9;
-      color: #555;
-      margin-bottom: 25px;
-    }
-
-    button {
-      background: none;
-      border: 1px solid #ccc;
-      padding: 10px 25px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #eee;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>فريدة</title>
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <div class="card">
-    <h1>لو قريتي ده…</h1>
+<div id="container">
+  <div id="word">فريدة</div>
+  <canvas id="canvas"></canvas>
+</div>
 
-    <p>
-      يبقى أنا خدّت شجاعة.<br><br>
-      مش بعرف أتكلم في اللحظة الصح،<br>
-      فعملت الصفحة دي يمكن الكلام هنا يطلع أصدق.<br><br>
-      وجودك مش عادي،<br>
-      وفيه حاجة بتخليني أرتاح<br>
-      من غير ما أفهم ليه.
-    </p>
-
-    <button onclick="closePage()">اقفلي الصفحة</button>
-  </div>
-
-  <script>
-    function closePage() {
-      document.body.innerHTML =
-        "<h2 style='text-align:center; color:#555; font-family:Cairo;'>شكراً إنك قريتي 🤍</h2>";
-    }
-  </script>
-
+<script src="script.js"></script>
 </body>
 </html>
