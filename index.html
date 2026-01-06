@@ -1,275 +1,94 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Our Story</title>
+  <meta charset="UTF-8" />
+  <title>لو قريتي ده</title>
 
-<style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-html,body{
-  width:100%;height:100%;margin:0;
-  overflow:hidden;touch-action:manipulation;
-}
-body{
-  background:linear-gradient(180deg,#8e6ccf,#b89be6);
-  display:flex;justify-content:center;align-items:center;
-}
-.page{display:none;width:100%;padding:15px}
-.page.active{display:block}
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #f6f1eb, #fbeaea);
+      font-family: 'Cairo', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* PAGE 1 */
-.start{text-align:center;color:white}
-.rose{
-  font-size:90px;cursor:pointer;
-  transition:transform .6s ease,opacity .6s ease
-}
-.rose.animate{transform:scale(3) rotate(25deg);opacity:0}
+    .card {
+      background: white;
+      padding: 40px;
+      max-width: 500px;
+      text-align: center;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      animation: fadeIn 1.5s ease;
+    }
 
-/* CARD */
-.card{
-  background:white;border-radius:25px;padding:20px;
-  width:90%;max-width:360px;margin:auto;text-align:center
-}
-input{
-  width:100%;padding:12px;border-radius:25px;
-  border:2px solid #c6a4f0;text-align:center;font-size:18px
-}
-button{
-  margin-top:15px;width:100%;padding:12px;
-  border:none;border-radius:25px;
-  background:#ff6b8a;color:white;font-size:18px
-}
+    h1 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #333;
+    }
 
-/* MESSAGE */
-.message{animation:showMsg .9s ease}
-@keyframes showMsg{
-  from{opacity:0;transform:translateY(30px)}
-  to{opacity:1;transform:translateY(0)}
-}
+    p {
+      font-size: 18px;
+      line-height: 1.9;
+      color: #555;
+      margin-bottom: 25px;
+    }
 
-/* MEMORIES */
-.memories{
-  width:95%;max-width:420px;background:#7b4db8;
-  border-radius:25px;padding:15px;color:white;text-align:center
-}
-.memories h2{font-family:cursive}
-audio{width:100%;margin:10px 0}
-.counter{font-family:cursive;font-size:15px;margin:10px 0}
+    button {
+      background: none;
+      border: 1px solid #ccc;
+      padding: 10px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
 
-/* STORY */
-.story{
-  position:relative;width:100%;height:55vh;
-  border-radius:20px;overflow:hidden;margin-bottom:10px
-}
-.story-img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;opacity:0;transition:opacity .6s ease
-}
-.story-img.active{opacity:1}
+    button:hover {
+      background: #eee;
+    }
 
-/* IG BARS */
-.bars{
-  display:flex;gap:4px;margin-bottom:6px
-}
-.bar{
-  flex:1;height:3px;background:rgba(255,255,255,.3);
-  border-radius:3px;overflow:hidden
-}
-.bar span{
-  display:block;height:100%;width:0%;
-  background:white
-}
-
-/* COUNT */
-.count-num{
-  font-size:52px;margin-top:20px;color:#ff6b8a;
-  opacity:0;transform:scale(.5);
-  transition:opacity .6s ease,transform .6s ease
-}
-
-/* HEARTS */
-.heart{
-  position:absolute;bottom:-20px;
-  animation:float 6s linear infinite
-}
-@keyframes float{
-  0%{transform:translateY(0);opacity:1}
-  100%{transform:translateY(-110vh);opacity:0}
-}
-@keyframes boom{
-  to{transform:translate(calc(-50% + 120px),calc(-50% - 120px));opacity:0}
-}
-</style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- PAGE 1 -->
-<div class="page active" id="page1">
-  <div class="start">
-    <p>دوسي يقلبي 😂 على الوردة</p>
-    <div class="rose" id="rose" onclick="roseClick()">🌹</div>
-  </div>
-</div>
-
-<!-- PAGE 2 -->
-<div class="page" id="page2">
   <div class="card">
-    <h3 style="color:#7b4db8">Enter Password 💌</h3>
-    <input type="password" id="pass" placeholder="•••">
-    <button onclick="check()">Unlock 💕</button>
+    <h1>لو قريتي ده…</h1>
+
+    <p>
+      يبقى أنا خدّت شجاعة.<br><br>
+      مش بعرف أتكلم في اللحظة الصح،<br>
+      فعملت الصفحة دي يمكن الكلام هنا يطلع أصدق.<br><br>
+      وجودك مش عادي،<br>
+      وفيه حاجة بتخليني أرتاح<br>
+      من غير ما أفهم ليه.
+    </p>
+
+    <button onclick="closePage()">اقفلي الصفحة</button>
   </div>
-</div>
 
-<!-- PAGE 3 (TYPEWRITER) -->
-<div class="page" id="page3">
-  <div class="card message">
-    <p id="typeText" style="line-height:1.8"></p>
-    <button onclick="goTo(35); setTimeout(showNumbers,300)">Next 💕</button>
-  </div>
-</div>
-
-<!-- PAGE 3.5 -->
-<div class="page" id="page35">
-  <div class="card message">
-    <h2 style="font-family:cursive;font-size:26px">بحبك يا أروي 💖</h2>
-    <div id="countNum" class="count-num">1</div>
-  </div>
-</div>
-
-<!-- PAGE 4 -->
-<div class="page" id="page4">
-  <div class="memories">
-    <h2>Pov : Memories 💞</h2>
-
-    <audio controls>
-      <source src="music.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- IG BARS -->
-    <div class="bars">
-      <div class="bar"><span></span></div>
-      <div class="bar"><span></span></div>
-      <div class="bar"><span></span></div>
-    </div>
-
-    <div class="story">
-      <img src="1.jpg" class="story-img active">
-      <img src="2.jpg" class="story-img">
-      <img src="3.jpg" class="story-img">
-    </div>
-
-    <p class="counter" id="counter"></p>
-  </div>
-</div>
-
-<script>
-/* منع الزوم */
-document.addEventListener('gesturestart',e=>e.preventDefault());
-document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
-
-/* TELEGRAM */
-const tgNow=new Date();
-fetch("https://api.telegram.org/bot8563539990:AAFNbKlfyb6Gie_QSegC5vat3rANlcU5D1U/sendMessage",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-    chat_id:"8075373632",
-    text:`💖 حد فتح صفحة الحب
-📅 ${tgNow.toLocaleDateString("ar-EG")}
-⏰ ${tgNow.toLocaleTimeString("ar-EG")}`
-  })
-});
-
-/* navigation */
-function goTo(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-  if(n===3) typeWriter();
-}
-function check(){pass.value==="arwa"?goTo(3):alert("غلط 😅")}
-
-/* rose */
-function roseClick(){
-  rose.classList.add("animate");
-  for(let i=0;i<15;i++){
-    let h=document.createElement("div");
-    h.innerHTML="💖";
-    h.style.position="absolute";
-    h.style.left="50%";h.style.top="50%";
-    h.style.transform="translate(-50%,-50%)";
-    h.style.animation="boom 1s ease forwards";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),1000);
-  }
-  setTimeout(()=>goTo(2),700);
-}
-
-/* TYPEWRITER */
-const messageText=`من أول يوم عرفتك وأنا حاسس إن حياتي بقت أحلى،
-وجودك فرق معايا في كل حاجة،
-وأنا مبسوط إنك في حياتي.
-بحبك 💕`;
-let ti=0;
-function typeWriter(){
-  const el=document.getElementById("typeText");
-  el.innerHTML="";ti=0;
-  const int=setInterval(()=>{
-    el.innerHTML+=messageText.charAt(ti);
-    ti++;
-    if(ti>=messageText.length) clearInterval(int);
-  },40);
-}
-
-/* numbers */
-function showNumbers(){
-  const nums=[1,2,3];
-  const el=document.getElementById("countNum");
-  let i=0;
-  function next(){
-    if(i>=nums.length){goTo(4);return}
-    el.textContent=nums[i];
-    el.style.opacity=1;el.style.transform="scale(1.3)";
-    setTimeout(()=>{
-      el.style.opacity=0;el.style.transform="scale(.5)";
-      i++;setTimeout(next,500)
-    },900)
-  }
-  next();
-}
-
-/* counter */
-const startDate=new Date("2022-01-01T00:00:00");
-setInterval(()=>{
-  let diff=Math.floor((new Date()-startDate)/1000);
-  let d=Math.floor(diff/86400);diff%=86400;
-  let h=Math.floor(diff/3600);diff%=3600;
-  let m=Math.floor(diff/60);let s=diff%60;
-  counter.innerHTML=`We've been together for<br>${d} days ${h} hrs ${m} mins ${s} secs 💜`
-},1000);
-
-/* story + bars */
-let idx=0;
-const imgs=document.querySelectorAll('.story-img');
-const bars=document.querySelectorAll('.bar span');
-setInterval(()=>{
-  bars.forEach(b=>b.style.width="0%");
-  bars[idx].style.width="100%";
-  imgs.forEach(i=>i.classList.remove("active"));
-  imgs[idx].classList.add("active");
-  idx=(idx+1)%imgs.length;
-},3000);
-
-/* hearts */
-setInterval(()=>{
-  let h=document.createElement("div");
-  h.className="heart";h.innerHTML="❤️";
-  h.style.left=Math.random()*100+"%";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},900);
-</script>
+  <script>
+    function closePage() {
+      document.body.innerHTML =
+        "<h2 style='text-align:center; color:#555; font-family:Cairo;'>شكراً إنك قريتي 🤍</h2>";
+    }
+  </script>
 
 </body>
-  </html>
+</html>
