@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -9,45 +9,63 @@
 <body style="margin:0;background:black;overflow:hidden;">
 
 <script>
-  // ====== إعداد الصفحة ======
+  // ===== إعداد =====
   document.body.style.background = "black";
-  document.body.style.overflow = "hidden";
 
-  // ====== الكلمة ======
+  // ===== الكلمة =====
   const word = document.createElement("div");
   word.innerText = "Farida";
-  word.style.position = "absolute";
-  word.style.top = "40%";
-  word.style.left = "50%";
-  word.style.transform = "translate(-50%, 0)";
-  word.style.color = "white";
-  word.style.fontSize = "16vw";
-  word.style.fontWeight = "600";
-  word.style.userSelect = "none";
+  Object.assign(word.style, {
+    position: "absolute",
+    top: "40%",
+    left: "50%",
+    transform: "translate(-50%, 0)",
+    color: "white",
+    fontSize: "16vw",
+    fontWeight: "600",
+    userSelect: "none"
+  });
   document.body.appendChild(word);
 
-  // ====== Canvas ======
+  // ===== canvas =====
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = innerWidth;
   canvas.height = innerHeight;
-  canvas.style.position = "fixed";
-  canvas.style.top = "0";
-  canvas.style.left = "0";
-  canvas.style.pointerEvents = "none";
+  Object.assign(canvas.style, {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    pointerEvents: "none"
+  });
   document.body.appendChild(canvas);
 
-  // ====== متغيرات ======
+  // ===== نص بحبك =====
+  const love = document.createElement("div");
+  love.innerText = "بحبك";
+  Object.assign(love.style, {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    color: "white",
+    fontSize: "6vw",
+    opacity: 0,
+    transition: "opacity 0.3s ease",
+    pointerEvents: "none"
+  });
+  document.body.appendChild(love);
+
   let y = 0;
   let particles = [];
   let stage = "fall";
+  let pulse = 0;
 
-  // ====== السقوط ======
+  // ===== السقوط =====
   const fall = setInterval(() => {
     if (stage !== "fall") return;
     y += 3;
     word.style.transform = `translate(-50%, ${y}px)`;
-
     if (y > 220) {
       stage = "ash";
       word.style.display = "none";
@@ -55,7 +73,7 @@
     }
   }, 16);
 
-  // ====== إنشاء الرماد ======
+  // ===== الرماد =====
   function createAsh() {
     particles = [];
     for (let i = 0; i < 260; i++) {
@@ -71,7 +89,7 @@
     setTimeout(formHeart, 1200);
   }
 
-  // ====== تكوين القلب ======
+  // ===== القلب =====
   function formHeart() {
     particles.forEach((p, i) => {
       const t = (i / particles.length) * Math.PI * 2;
@@ -87,23 +105,32 @@
     stage = "heart";
   }
 
-  // ====== الرسم ======
+  // ===== رسم + نبض =====
   function animate() {
-    // خلفية سودا ثابتة
     ctx.fillStyle = "rgba(0,0,0,0.35)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    particles.forEach(p => {
-      if (stage === "ash") {
+    if (stage === "heart") {
+      pulse += 0.05;
+      const beat = 1 + Math.sin(pulse) * 0.05;
+
+      love.style.opacity = Math.sin(pulse) > 0 ? 1 : 0;
+      love.style.transform = `translate(-50%, -50%) scale(${beat})`;
+
+      particles.forEach(p => {
+        p.x += (p.tx - p.x) * 0.06 * beat;
+        p.y += (p.ty - p.y) * 0.06 * beat;
+        ctx.fillStyle = "red";
+        ctx.fillRect(p.x, p.y, 2, 2);
+      });
+    } else {
+      particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
-      } else if (stage === "heart") {
-        p.x += (p.tx - p.x) * 0.06;
-        p.y += (p.ty - p.y) * 0.06;
-      }
-      ctx.fillStyle = stage === "heart" ? "red" : "white";
-      ctx.fillRect(p.x, p.y, 2, 2);
-    });
+        ctx.fillStyle = "white";
+        ctx.fillRect(p.x, p.y, 2, 2);
+      });
+    }
 
     requestAnimationFrame(animate);
   }
