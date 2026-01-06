@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Farida</title>
+</head>
+
+<body style="margin:0;background:black;overflow:hidden;">
+
+<script>
+  // إنشاء الكلمة
+  const word = document.createElement("div");
+  word.innerText = "Farida";
+
+  word.style.position = "absolute";
+  word.style.top = "40%";
+  word.style.left = "50%";
+  word.style.transform = "translate(-50%, 0)";
+  word.style.color = "white";
+  word.style.fontSize = "16vw";
+  word.style.fontWeight = "600";
+  word.style.userSelect = "none";
+
+  document.body.appendChild(word);
+
+  // حركة السقوط
+  let y = 0;
+  setInterval(() => {
+    y += 3;
+    word.style.transform = `translate(-50%, ${y}px)`;
+  }, 16);
+</script>
+
+</body>
+</html>
