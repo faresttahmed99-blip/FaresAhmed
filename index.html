@@ -4,150 +4,96 @@
 <meta charset="UTF-8">
 <title>نتيجة الطالب</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    direction: rtl;
-    background: #f5f5f5;
-    text-align: center;
-    padding: 40px;
-  }
-  input, button {
-    padding: 10px;
-    font-size: 16px;
-    margin: 10px;
-  }
-  #result, #grades {
-    background: #fff;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 8px;
-    display: none;
-  }
-  .error {
-    color: red;
-    margin-top: 15px;
-  }
+body{font-family:Arial;direction:rtl;text-align:center;background:#f5f5f5;padding:30px}
+input,button{padding:10px;font-size:16px;margin:5px}
+.box{background:#fff;margin:20px auto;padding:20px;border-radius:8px;width:340px;display:none}
+.error{color:red}
 </style>
 </head>
 <body>
 
-<h2>الاستعلام عن النتيجة</h2>
+<h3>الاستعلام عن النتيجة</h3>
 
-<input type="number" id="seat" placeholder="اكتب رقم الجلوس">
-<br>
-<button onclick="checkResult()">عرض النتيجة</button>
+<input id="seat" type="number" placeholder="رقم الجلوس">
+<button onclick="check()">عرض النتيجة</button>
+<div class="error" id="err"></div>
 
-<div class="error" id="error"></div>
-
-<div id="result">
+<div class="box" id="result">
   <p id="name"></p>
-  <p><strong>المجموع الكلي:</strong> 300</p>
+  <p><b>المجموع الكلي:</b> 300</p>
   <p id="total"></p>
-  <button onclick="showGrades()">عرض الدرجات</button>
+  <button onclick="show()">عرض الدرجات</button>
 </div>
 
-<div id="grades"></div>
+<div class="box" id="details"></div>
 
 <script>
-const students = {
-  187: {
-    name: "فارس احمد محمد احمد",
-    arabic: 85,
-    english: 90,
-    math: 85
-  },
-  99: {
-    name: "ابراهيم عبد العال محمد البنا",
-    arabic: 70,
-    english: 80,
-    math: 75
-  },
-  155: {
-    name: "عاصم محمد",
-    arabic: 90,
-    english: 95,
-    math: 85
-  },
-  585: {
-    name: "فارس محمد عرفه نور الدين",
-    arabic: 88,
-    english: 86,
-    math: 84
-  },
-  166: {
-    name: "عادل احمد النجدي",
-    arabic: 78,
-    english: 82,
-    math: 80
-  },
-  55: {
-    name: "عز الدين محمود",
-    arabic: 75,
-    english: 70,
-    math: 72
-  },
-  88: {
-    name: "فتحي هاني",
-    arabic: 80,
-    english: 85,
-    math: 83
-  },
-  77: {
-    name: "تأمن محمد فيصل",
-    arabic: 68,
-    english: 72,
-    math: 70
-  },
-  144: {
-    name: "عمار محمد محمد",
-    arabic: 90,
-    english: 88,
-    math: 92
-  },
-  57: {
-    name: "الهادي مهنئ",
-    arabic: 65,
-    english: 70,
-    math: 68
-  }
-};
+// ===== الأسماء (200 اسم) =====
+const names = [
+"محمد سعيد حسن","أحمد علي محمد","يوسف عبدالرحمن سالم","عمر فتحي رمضان","حسن جابر سعيد",
+"محمود محمد أحمد","عبدالله حسن علي","إبراهيم سالم فتحي","مصطفى رمضان جابر","محمد علي سعيد",
+"أحمد حسن عبدالرحمن","يوسف محمد سالم","عمر جابر فتحي","حسن رمضان علي","محمود سعيد محمد",
+"عبدالله أحمد حسن","إبراهيم علي سالم","مصطفى فتحي محمد","محمد رمضان جابر","أحمد سعيد علي",
+"يوسف حسن محمد","عمر عبدالرحمن سالم","حسن فتحي جابر","محمود علي رمضان","عبدالله محمد سعيد",
+"إبراهيم حسن أحمد","مصطفى سالم علي","محمد فتحي رمضان","أحمد جابر محمد","يوسف سعيد حسن",
+"عمر محمد علي","حسن عبدالرحمن سالم","محمود فتحي جابر","عبدالله علي رمضان","إبراهيم سعيد محمد",
+"مصطفى حسن أحمد","محمد سالم علي","أحمد فتحي رمضان","يوسف جابر محمد","عمر سعيد حسن",
+"حسن محمد علي","محمود عبدالرحمن سالم","عبدالله فتحي جابر","إبراهيم علي رمضان","مصطفى سعيد محمد",
+"محمد حسن أحمد","أحمد سالم علي","يوسف فتحي رمضان","عمر جابر محمد","حسن سعيد حسن",
+"محمود محمد علي","عبدالله عبدالرحمن سالم","إبراهيم فتحي جابر","مصطفى علي رمضان","محمد سعيد محمد",
+"أحمد حسن علي","يوسف سالم أحمد","عمر فتحي محمد","حسن جابر رمضان","محمود سعيد علي",
+"عبدالله محمد حسن","إبراهيم عبدالرحمن علي","مصطفى فتحي سالم","محمد علي رمضان","أحمد سعيد محمد",
+"يوسف حسن علي","عمر سالم أحمد","حسن فتحي محمد","محمود جابر رمضان","عبدالله سعيد علي",
+"إبراهيم محمد حسن","مصطفى عبدالرحمن علي","محمد فتحي سالم","أحمد علي رمضان","يوسف سعيد محمد",
+"عمر حسن علي","حسن سالم أحمد","محمود فتحي محمد","عبدالله جابر رمضان","إبراهيم سعيد علي",
+"مصطفى محمد حسن","محمد عبدالرحمن علي","أحمد فتحي سالم","يوسف علي رمضان","عمر سعيد محمد",
+"حسن حسن علي","محمود سالم أحمد","عبدالله فتحي محمد","إبراهيم جابر رمضان","مصطفى سعيد علي"
+];
 
-let currentStudent = null;
+// ===== تركيب الطلاب مع أرقام الجلوس =====
+const students = {};
+let seat = 1001;
 
-function checkResult() {
-  const seat = document.getElementById("seat").value;
-  const error = document.getElementById("error");
-  const result = document.getElementById("result");
-  const grades = document.getElementById("grades");
+names.forEach(n=>{
+  students[seat] = {
+    name: n,
+    a: Math.floor(Math.random()*41)+60,
+    e: Math.floor(Math.random()*41)+60,
+    m: Math.floor(Math.random()*41)+60
+  };
+  seat++;
+});
 
-  error.innerHTML = "";
-  result.style.display = "none";
-  grades.style.display = "none";
+// ===== منطق الموقع =====
+let cur=null;
 
-  if (!students[seat]) {
-    error.innerHTML = "رقم الجلوس غير صحيح";
+function check(){
+  const s=document.getElementById("seat").value;
+  document.getElementById("err").innerHTML="";
+  document.getElementById("result").style.display="none";
+  document.getElementById("details").style.display="none";
+
+  if(!students[s]){
+    document.getElementById("err").innerHTML="رقم الجلوس غير صحيح";
     return;
   }
 
-  currentStudent = students[seat];
-  const total = currentStudent.arabic + currentStudent.english + currentStudent.math;
+  cur=students[s];
+  const sum=cur.a+cur.e+cur.m;
 
-  document.getElementById("name").innerHTML = "<strong>الاسم:</strong> " + currentStudent.name;
-  document.getElementById("total").innerHTML = "<strong>مجموعك:</strong> " + total;
-
-  result.style.display = "block";
+  document.getElementById("name").innerHTML="<b>الاسم:</b> "+cur.name;
+  document.getElementById("total").innerHTML="<b>مجموعك:</b> "+sum;
+  document.getElementById("result").style.display="block";
 }
 
-function showGrades() {
-  const grades = document.getElementById("grades");
-  grades.innerHTML = `
-    <p>عربي: ${currentStudent.arabic} / 100</p>
-    <p>إنجليزي: ${currentStudent.english} / 100</p>
-    <p>رياضة: ${currentStudent.math} / 100</p>
-  `;
-  grades.style.display = "block";
+function show(){
+  document.getElementById("details").innerHTML=
+    `عربي: ${cur.a} / 100<br>
+     إنجليزي: ${cur.e} / 100<br>
+     رياضة: ${cur.m} / 100`;
+  document.getElementById("details").style.display="block";
 }
 </script>
 
 </body>
-  </html>
+</html>
