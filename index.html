@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>نتيجة الطالب</title>
+
 <style>
 body{
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   direction: rtl;
   text-align: center;
-  background:#f2f2f2;
+  background:#f5f5f5;
   padding:30px
 }
 input,button{
@@ -21,20 +22,23 @@ input,button{
   margin:20px auto;
   padding:20px;
   border-radius:8px;
-  width:360px;
+  width:380px;
   display:none
 }
 .error{color:red}
 .footer{
   margin-top:40px;
-  color:#555;
-  font-size:14px
+  font-size:14px;
+  color:#555
 }
+a{color:#007bff;text-decoration:none}
 </style>
 </head>
+
 <body>
 
 <h2>الاستعلام عن نتيجة الطالب</h2>
+<p><b>العام الدراسي:</b> 2025 / 2026</p>
 
 <input id="seat" type="number" placeholder="رقم الجلوس">
 <br>
@@ -44,87 +48,224 @@ input,button{
 
 <div class="box" id="result">
   <p id="name"></p>
-  <p><b>المجموع الكلي:</b> 300</p>
   <p id="total"></p>
+  <p id="percent"></p>
   <button onclick="showGrades()">عرض الدرجات</button>
 </div>
 
 <div class="box" id="details"></div>
 
 <div class="footer">
-  المطور : <b>RTX</b><br>
+  WhatsApp:
+  <a href="https://wa.me/201096914946" target="_blank">01096914946</a><br><br>
+  المطور: <b>RTX</b><br>
   fares Ahmed
 </div>
 
 <script>
-// ====== بيانات تليجرام ======
-const TOKEN = "8136782902:AAFryDvdk1OSc3z-31VJFMNnDFX5v1i1x1I";
-const CHAT_ID = "8300896592";
-
-// ====== 200 طالب ======
+// ===== بيانات الطلاب (10 فقط) =====
 const students = {
-  1001:{name:"محمد سعيد حسن",a:85,e:90,m:85},
-  1002:{name:"أحمد علي محمد",a:78,e:82,m:80},
-  1003:{name:"يوسف عبدالرحمن سالم",a:90,e:88,m:92},
-  1004:{name:"عمر فتحي رمضان",a:75,e:70,m:72},
-  1005:{name:"حسن جابر سعيد",a:88,e:84,m:86},
-  1006:{name:"محمود محمد أحمد",a:81,e:79,m:83},
-  1007:{name:"عبدالله حسن علي",a:92,e:90,m:94},
-  1008:{name:"إبراهيم سالم فتحي",a:76,e:74,m:78},
-  1009:{name:"مصطفى رمضان جابر",a:89,e:87,m:90},
-  1010:{name:"محمد علي سعيد",a:80,e:82,m:81},
 
-  // نفس النمط مكمل لحد 1200
+  187:{
+    name:"فارس أحمد محمد أحمد",
+    main:{
+      "عربي":{max:80,score:70},
+      "إنجليزي":{max:80,score:77},
+      "دراسات":{max:80,score:50},
+      "علوم":{max:80,score:40}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:5},
+      "اللغة الفرنسية":{max:80,score:44},
+      "الحاسب الآلي":{max:20,score:7}
+    }
+  },
+
+  99:{
+    name:"إبراهيم عبد العال محمد البنا",
+    main:{
+      "عربي":{max:80,score:60},
+      "إنجليزي":{max:80,score:65},
+      "دراسات":{max:80,score:55},
+      "علوم":{max:80,score:58}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:10},
+      "اللغة الفرنسية":{max:80,score:40},
+      "الحاسب الآلي":{max:20,score:12}
+    }
+  },
+
+  155:{
+    name:"عاصم محمد",
+    main:{
+      "عربي":{max:80,score:75},
+      "إنجليزي":{max:80,score:70},
+      "دراسات":{max:80,score:68},
+      "علوم":{max:80,score:72}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:14},
+      "اللغة الفرنسية":{max:80,score:55},
+      "الحاسب الآلي":{max:20,score:15}
+    }
+  },
+
+  585:{
+    name:"فارس محمد عرفة نور الدين",
+    main:{
+      "عربي":{max:80,score:50},
+      "إنجليزي":{max:80,score:45},
+      "دراسات":{max:80,score:48},
+      "علوم":{max:80,score:52}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:8},
+      "اللغة الفرنسية":{max:80,score:30},
+      "الحاسب الآلي":{max:20,score:9}
+    }
+  },
+
+  166:{
+    name:"عادل أحمد النجدي",
+    main:{
+      "عربي":{max:80,score:66},
+      "إنجليزي":{max:80,score:69},
+      "دراسات":{max:80,score:64},
+      "علوم":{max:80,score:67}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:11},
+      "اللغة الفرنسية":{max:80,score:46},
+      "الحاسب الآلي":{max:20,score:13}
+    }
+  },
+
+  55:{
+    name:"عز الدين محمود",
+    main:{
+      "عربي":{max:80,score:58},
+      "إنجليزي":{max:80,score:60},
+      "دراسات":{max:80,score:57},
+      "علوم":{max:80,score:59}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:9},
+      "اللغة الفرنسية":{max:80,score:35},
+      "الحاسب الآلي":{max:20,score:10}
+    }
+  },
+
+  88:{
+    name:"فتحي هاني",
+    main:{
+      "عربي":{max:80,score:72},
+      "إنجليزي":{max:80,score:74},
+      "دراسات":{max:80,score:70},
+      "علوم":{max:80,score:73}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:15},
+      "اللغة الفرنسية":{max:80,score:60},
+      "الحاسب الآلي":{max:20,score:17}
+    }
+  },
+
+  77:{
+    name:"تأمن محمد فيصل",
+    main:{
+      "عربي":{max:80,score:55},
+      "إنجليزي":{max:80,score:58},
+      "دراسات":{max:80,score:53},
+      "علوم":{max:80,score:56}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:7},
+      "اللغة الفرنسية":{max:80,score:33},
+      "الحاسب الآلي":{max:20,score:8}
+    }
+  },
+
+  144:{
+    name:"عمار محمد محمد",
+    main:{
+      "عربي":{max:80,score:78},
+      "إنجليزي":{max:80,score:76},
+      "دراسات":{max:80,score:74},
+      "علوم":{max:80,score:77}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:16},
+      "اللغة الفرنسية":{max:80,score:65},
+      "الحاسب الآلي":{max:20,score:18}
+    }
+  },
+
+  57:{
+    name:"الهادي مهنئ",
+    main:{
+      "عربي":{max:80,score:62},
+      "إنجليزي":{max:80,score:64},
+      "دراسات":{max:80,score:60},
+      "علوم":{max:80,score:63}
+    },
+    extra:{
+      "التربية الإسلامية":{max:17,score:12},
+      "اللغة الفرنسية":{max:80,score:42},
+      "الحاسب الآلي":{max:20,score:11}
+    }
+  }
+
 };
 
-// ====== إرسال لتليجرام (للصح بس) ======
-function sendSeatToTelegram(seat){
-  const text = `طالب دخل نتيجته\nرقم الجلوس: ${seat}`;
-  fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({
-      chat_id:CHAT_ID,
-      text:text
-    })
-  });
-}
-
-// ====== منطق الصفحة ======
-let current=null;
+// ===== منطق الصفحة =====
+let current = null;
 
 function submitSeat(){
-  const seat=document.getElementById("seat").value;
+  const seat = document.getElementById("seat").value;
   document.getElementById("err").innerHTML="";
   document.getElementById("result").style.display="none";
   document.getElementById("details").style.display="none";
-
-  if(!seat){
-    document.getElementById("err").innerHTML="اكتب رقم الجلوس";
-    return;
-  }
 
   if(!students[seat]){
     document.getElementById("err").innerHTML="رقم الجلوس غير صحيح";
     return;
   }
 
-  // الرقم صح
-  sendSeatToTelegram(seat);
-
   current = students[seat];
-  const sum = current.a + current.e + current.m;
 
-  document.getElementById("name").innerHTML="<b>الاسم:</b> "+current.name;
-  document.getElementById("total").innerHTML="<b>مجموعك:</b> "+sum;
+  let total = 0;
+  let maxTotal = 0;
+
+  for(let s in current.main){
+    total += current.main[s].score;
+    maxTotal += current.main[s].max;
+  }
+
+  let percent = ((total / maxTotal) * 100).toFixed(2);
+
+  document.getElementById("name").innerHTML = `<b>الاسم:</b> ${current.name}`;
+  document.getElementById("total").innerHTML = `<b>المجموع:</b> ${total} / ${maxTotal}`;
+  document.getElementById("percent").innerHTML = `<b>النسبة المئوية:</b> ${percent}%`;
+
   document.getElementById("result").style.display="block";
 }
 
 function showGrades(){
-  document.getElementById("details").innerHTML=
-    `عربي: ${current.a} / 100<br>
-     إنجليزي: ${current.e} / 100<br>
-     رياضة: ${current.m} / 100`;
+  let html = "";
+
+  for(let s in current.main){
+    html += `${s}: ${current.main[s].score} / ${current.main[s].max}<br>`;
+  }
+
+  html += `<br>🤓 تم (${current.name})<br><br>`;
+  html += `المواد التي لا تضاف إلى المجموع 👇<br>`;
+
+  for(let s in current.extra){
+    html += `${s}: ${current.extra[s].score} / ${current.extra[s].max}<br>`;
+  }
+
+  document.getElementById("details").innerHTML = html;
   document.getElementById("details").style.display="block";
 }
 </script>
