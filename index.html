@@ -1,142 +1,153 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Farida</title>
+<meta charset="UTF-8">
+<title>نتيجة الطالب</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    background: #f5f5f5;
+    text-align: center;
+    padding: 40px;
+  }
+  input, button {
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+  }
+  #result, #grades {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    display: none;
+  }
+  .error {
+    color: red;
+    margin-top: 15px;
+  }
+</style>
 </head>
+<body>
 
-<body style="margin:0;background:black;overflow:hidden;">
+<h2>الاستعلام عن النتيجة</h2>
+
+<input type="number" id="seat" placeholder="اكتب رقم الجلوس">
+<br>
+<button onclick="checkResult()">عرض النتيجة</button>
+
+<div class="error" id="error"></div>
+
+<div id="result">
+  <p id="name"></p>
+  <p><strong>المجموع الكلي:</strong> 300</p>
+  <p id="total"></p>
+  <button onclick="showGrades()">عرض الدرجات</button>
+</div>
+
+<div id="grades"></div>
 
 <script>
-  // ===== إعداد =====
-  document.body.style.background = "black";
+const students = {
+  187: {
+    name: "فارس احمد محمد احمد",
+    arabic: 85,
+    english: 90,
+    math: 85
+  },
+  99: {
+    name: "ابراهيم عبد العال محمد البنا",
+    arabic: 70,
+    english: 80,
+    math: 75
+  },
+  155: {
+    name: "عاصم محمد",
+    arabic: 90,
+    english: 95,
+    math: 85
+  },
+  585: {
+    name: "فارس محمد عرفه نور الدين",
+    arabic: 88,
+    english: 86,
+    math: 84
+  },
+  166: {
+    name: "عادل احمد النجدي",
+    arabic: 78,
+    english: 82,
+    math: 80
+  },
+  55: {
+    name: "عز الدين محمود",
+    arabic: 75,
+    english: 70,
+    math: 72
+  },
+  88: {
+    name: "فتحي هاني",
+    arabic: 80,
+    english: 85,
+    math: 83
+  },
+  77: {
+    name: "تأمن محمد فيصل",
+    arabic: 68,
+    english: 72,
+    math: 70
+  },
+  144: {
+    name: "عمار محمد محمد",
+    arabic: 90,
+    english: 88,
+    math: 92
+  },
+  57: {
+    name: "الهادي مهنئ",
+    arabic: 65,
+    english: 70,
+    math: 68
+  }
+};
 
-  // ===== الكلمة =====
-  const word = document.createElement("div");
-  word.innerText = "Farida";
-  Object.assign(word.style, {
-    position: "absolute",
-    top: "40%",
-    left: "50%",
-    transform: "translate(-50%, 0)",
-    color: "white",
-    fontSize: "16vw",
-    fontWeight: "600",
-    userSelect: "none"
-  });
-  document.body.appendChild(word);
+let currentStudent = null;
 
-  // ===== canvas =====
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-  Object.assign(canvas.style, {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    pointerEvents: "none"
-  });
-  document.body.appendChild(canvas);
+function checkResult() {
+  const seat = document.getElementById("seat").value;
+  const error = document.getElementById("error");
+  const result = document.getElementById("result");
+  const grades = document.getElementById("grades");
 
-  // ===== نص بحبك =====
-  const love = document.createElement("div");
-  love.innerText = "بحبك";
-  Object.assign(love.style, {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    color: "white",
-    fontSize: "6vw",
-    opacity: 0,
-    transition: "opacity 0.3s ease",
-    pointerEvents: "none"
-  });
-  document.body.appendChild(love);
+  error.innerHTML = "";
+  result.style.display = "none";
+  grades.style.display = "none";
 
-  let y = 0;
-  let particles = [];
-  let stage = "fall";
-  let pulse = 0;
-
-  // ===== السقوط =====
-  const fall = setInterval(() => {
-    if (stage !== "fall") return;
-    y += 3;
-    word.style.transform = `translate(-50%, ${y}px)`;
-    if (y > 220) {
-      stage = "ash";
-      word.style.display = "none";
-      createAsh();
-    }
-  }, 16);
-
-  // ===== الرماد =====
-  function createAsh() {
-    particles = [];
-    for (let i = 0; i < 260; i++) {
-      particles.push({
-        x: innerWidth / 2,
-        y: innerHeight / 2,
-        vx: (Math.random() - 0.5) * 5,
-        vy: (Math.random() - 0.5) * 5,
-        tx: 0,
-        ty: 0
-      });
-    }
-    setTimeout(formHeart, 1200);
+  if (!students[seat]) {
+    error.innerHTML = "رقم الجلوس غير صحيح";
+    return;
   }
 
-  // ===== القلب =====
-  function formHeart() {
-    particles.forEach((p, i) => {
-      const t = (i / particles.length) * Math.PI * 2;
-      p.tx = innerWidth / 2 + 14 * Math.pow(Math.sin(t), 3) * 10;
-      p.ty =
-        innerHeight / 2 -
-        (13 * Math.cos(t) -
-          5 * Math.cos(2 * t) -
-          2 * Math.cos(3 * t) -
-          Math.cos(4 * t)) *
-          10;
-    });
-    stage = "heart";
-  }
+  currentStudent = students[seat];
+  const total = currentStudent.arabic + currentStudent.english + currentStudent.math;
 
-  // ===== رسم + نبض =====
-  function animate() {
-    ctx.fillStyle = "rgba(0,0,0,0.35)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  document.getElementById("name").innerHTML = "<strong>الاسم:</strong> " + currentStudent.name;
+  document.getElementById("total").innerHTML = "<strong>مجموعك:</strong> " + total;
 
-    if (stage === "heart") {
-      pulse += 0.05;
-      const beat = 1 + Math.sin(pulse) * 0.05;
+  result.style.display = "block";
+}
 
-      love.style.opacity = Math.sin(pulse) > 0 ? 1 : 0;
-      love.style.transform = `translate(-50%, -50%) scale(${beat})`;
-
-      particles.forEach(p => {
-        p.x += (p.tx - p.x) * 0.06 * beat;
-        p.y += (p.ty - p.y) * 0.06 * beat;
-        ctx.fillStyle = "red";
-        ctx.fillRect(p.x, p.y, 2, 2);
-      });
-    } else {
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        ctx.fillStyle = "white";
-        ctx.fillRect(p.x, p.y, 2, 2);
-      });
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
+function showGrades() {
+  const grades = document.getElementById("grades");
+  grades.innerHTML = `
+    <p>عربي: ${currentStudent.arabic} / 100</p>
+    <p>إنجليزي: ${currentStudent.english} / 100</p>
+    <p>رياضة: ${currentStudent.math} / 100</p>
+  `;
+  grades.style.display = "block";
+}
 </script>
 
 </body>
-</html>
+  </html>
