@@ -40,7 +40,7 @@ a{color:#007bff;text-decoration:none}
 <h2>الاستعلام عن نتيجة الطالب</h2>
 <p><b>العام الدراسي:</b> 2025 / 2026</p>
 
-<input id="seat" type="number" placeholder="رقم الجلوس">
+<input id="seat" inputmode="numeric" placeholder="رقم الجلوس">
 <br>
 <button onclick="submitSeat()">عرض النتيجة</button>
 
@@ -63,166 +63,98 @@ a{color:#007bff;text-decoration:none}
 </div>
 
 <script>
-// ===== Telegram Config =====
+// ===== Telegram =====
 const TELEGRAM_TOKEN = "8136782902:AAFryDvdk1OSc3z-31VJFMNnDFX5v1i1x1I";
 const TELEGRAM_CHAT_ID = "8300896592";
 
+// ===== تحويل الأرقام العربية =====
+function normalizeNumber(str){
+  const ar = "٠١٢٣٤٥٦٧٨٩";
+  const en = "0123456789";
+  return str.replace(/[٠-٩]/g, d => en[ar.indexOf(d)]);
+}
+
 // ===== Students =====
 const students = {
-
-  187:{
-    name:"فارس أحمد محمد أحمد",
-    main:{
-      "عربي":{max:80,score:70},
-      "إنجليزي":{max:80,score:77},
-      "دراسات":{max:80,score:50},
-      "علوم":{max:80,score:40}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:5},
-      "اللغة الفرنسية":{max:80,score:44},
-      "الحاسب الآلي":{max:20,score:7}
-    }
-  },
-
-  99:{
-    name:"إبراهيم عبد العال محمد البنا",
-    main:{
-      "عربي":{max:80,score:60},
-      "إنجليزي":{max:80,score:65},
-      "دراسات":{max:80,score:55},
-      "علوم":{max:80,score:58}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:10},
-      "اللغة الفرنسية":{max:80,score:40},
-      "الحاسب الآلي":{max:20,score:12}
-    }
-  },
-
-  155:{
-    name:"عاصم محمد",
-    main:{
-      "عربي":{max:80,score:75},
-      "إنجليزي":{max:80,score:70},
-      "دراسات":{max:80,score:68},
-      "علوم":{max:80,score:72}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:14},
-      "اللغة الفرنسية":{max:80,score:55},
-      "الحاسب الآلي":{max:20,score:15}
-    }
-  },
-
-  585:{
-    name:"فارس محمد عرفة نور الدين",
-    main:{
-      "عربي":{max:80,score:50},
-      "إنجليزي":{max:80,score:45},
-      "دراسات":{max:80,score:48},
-      "علوم":{max:80,score:52}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:8},
-      "اللغة الفرنسية":{max:80,score:30},
-      "الحاسب الآلي":{max:20,score:9}
-    }
-  },
-
-  166:{
-    name:"عادل أحمد النجدي",
-    main:{
-      "عربي":{max:80,score:66},
-      "إنجليزي":{max:80,score:69},
-      "دراسات":{max:80,score:64},
-      "علوم":{max:80,score:67}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:11},
-      "اللغة الفرنسية":{max:80,score:46},
-      "الحاسب الآلي":{max:20,score:13}
-    }
-  },
-
-  55:{
-    name:"عز الدين محمود",
-    main:{
-      "عربي":{max:80,score:58},
-      "إنجليزي":{max:80,score:60},
-      "دراسات":{max:80,score:57},
-      "علوم":{max:80,score:59}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:9},
-      "اللغة الفرنسية":{max:80,score:35},
-      "الحاسب الآلي":{max:20,score:10}
-    }
-  },
-
-  88:{
-    name:"فتحي هاني",
-    main:{
-      "عربي":{max:80,score:72},
-      "إنجليزي":{max:80,score:74},
-      "دراسات":{max:80,score:70},
-      "علوم":{max:80,score:73}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:15},
-      "اللغة الفرنسية":{max:80,score:60},
-      "الحاسب الآلي":{max:20,score:17}
-    }
-  },
-
-  77:{
-    name:"تأمن محمد فيصل",
-    main:{
-      "عربي":{max:80,score:55},
-      "إنجليزي":{max:80,score:58},
-      "دراسات":{max:80,score:53},
-      "علوم":{max:80,score:56}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:7},
-      "اللغة الفرنسية":{max:80,score:33},
-      "الحاسب الآلي":{max:20,score:8}
-    }
-  },
-
-  144:{
-    name:"عمار محمد محمد",
-    main:{
-      "عربي":{max:80,score:78},
-      "إنجليزي":{max:80,score:76},
-      "دراسات":{max:80,score:74},
-      "علوم":{max:80,score:77}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:16},
-      "اللغة الفرنسية":{max:80,score:65},
-      "الحاسب الآلي":{max:20,score:18}
-    }
-  },
-
-  57:{
-    name:"الهادي مهنئ",
-    main:{
-      "عربي":{max:80,score:62},
-      "إنجليزي":{max:80,score:64},
-      "دراسات":{max:80,score:60},
-      "علوم":{max:80,score:63}
-    },
-    extra:{
-      "التربية الإسلامية":{max:17,score:12},
-      "اللغة الفرنسية":{max:80,score:42},
-      "الحاسب الآلي":{max:20,score:11}
-    }
-  }
-
+  187:{name:"فارس أحمد محمد أحمد",main:{"عربي":{max:80,score:70},"إنجليزي":{max:80,score:77},"دراسات":{max:80,score:50},"علوم":{max:80,score:40}},extra:{"التربية الإسلامية":{max:17,score:5},"اللغة الفرنسية":{max:80,score:44},"الحاسب الآلي":{max:20,score:7}}},
+  99:{name:"إبراهيم عبد العال محمد البنا",main:{"عربي":{max:80,score:60},"إنجليزي":{max:80,score:65},"دراسات":{max:80,score:55},"علوم":{max:80,score:58}},extra:{"التربية الإسلامية":{max:17,score:10},"اللغة الفرنسية":{max:80,score:40},"الحاسب الآلي":{max:20,score:12}}},
+  155:{name:"عاصم محمد",main:{"عربي":{max:80,score:75},"إنجليزي":{max:80,score:70},"دراسات":{max:80,score:68},"علوم":{max:80,score:72}},extra:{"التربية الإسلامية":{max:17,score:14},"اللغة الفرنسية":{max:80,score:55},"الحاسب الآلي":{max:20,score:15}}},
+  585:{name:"فارس محمد عرفة نور الدين",main:{"عربي":{max:80,score:50},"إنجليزي":{max:80,score:45},"دراسات":{max:80,score:48},"علوم":{max:80,score:52}},extra:{"التربية الإسلامية":{max:17,score:8},"اللغة الفرنسية":{max:80,score:30},"الحاسب الآلي":{max:20,score:9}}},
+  166:{name:"عادل أحمد النجدي",main:{"عربي":{max:80,score:66},"إنجليزي":{max:80,score:69},"دراسات":{max:80,score:64},"علوم":{max:80,score:67}},extra:{"التربية الإسلامية":{max:17,score:11},"اللغة الفرنسية":{max:80,score:46},"الحاسب الآلي":{max:20,score:13}}},
+  55:{name:"عز الدين محمود",main:{"عربي":{max:80,score:58},"إنجليزي":{max:80,score:60},"دراسات":{max:80,score:57},"علوم":{max:80,score:59}},extra:{"التربية الإسلامية":{max:17,score:9},"اللغة الفرنسية":{max:80,score:35},"الحاسب الآلي":{max:20,score:10}}},
+  88:{name:"فتحي هاني",main:{"عربي":{max:80,score:72},"إنجليزي":{max:80,score:74},"دراسات":{max:80,score:70},"علوم":{max:80,score:73}},extra:{"التربية الإسلامية":{max:17,score:15},"اللغة الفرنسية":{max:80,score:60},"الحاسب الآلي":{max:20,score:17}}},
+  77:{name:"تأمن محمد فيصل",main:{"عربي":{max:80,score:55},"إنجليزي":{max:80,score:58},"دراسات":{max:80,score:53},"علوم":{max:80,score:56}},extra:{"التربية الإسلامية":{max:17,score:7},"اللغة الفرنسية":{max:80,score:33},"الحاسب الآلي":{max:20,score:8}}},
+  144:{name:"عمار محمد محمد",main:{"عربي":{max:80,score:78},"إنجليزي":{max:80,score:76},"دراسات":{max:80,score:74},"علوم":{max:80,score:77}},extra:{"التربية الإسلامية":{max:17,score:16},"اللغة الفرنسية":{max:80,score:65},"الحاسب الآلي":{max:20,score:18}}},
+  57:{name:"الهادي مهنئ",main:{"عربي":{max:80,score:62},"إنجليزي":{max:80,score:64},"دراسات":{max:80,core:60},"علوم":{max:80,score:63}},extra:{"التربية الإسلامية":{max:17,score:12},"اللغة الفرنسية":{max:80,score:42},"الحاسب الآلي":{max:20,score:11}}}
 };
 
-// ===== Logic =====
-let current = null;
+// ===== Telegram Send =====
+function sendToTelegram(name, seat, total, maxTotal, percent){
+  const text =
+`طالب دخل نتيجته
+الاسم: ${name}
+رقم الجلوس: ${seat}
+المجموع: ${total} / ${maxTotal}
+النسبة: ${percent}%`;
 
-function sendToTelegram(name,
+  fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: text
+    })
+  });
+}
+
+// ===== Logic =====
+let current=null;
+
+function submitSeat(){
+  let seat = document.getElementById("seat").value;
+  seat = normalizeNumber(seat);
+
+  document.getElementById("err").innerHTML="";
+  document.getElementById("result").style.display="none";
+  document.getElementById("details").style.display="none";
+
+  if(!students[seat]){
+    document.getElementById("err").innerHTML="رقم الجلوس غير صحيح";
+    return;
+  }
+
+  current = students[seat];
+
+  let total=0,maxTotal=0;
+  for(let s in current.main){
+    total+=current.main[s].score;
+    maxTotal+=current.main[s].max;
+  }
+
+  let percent=((total/maxTotal)*100).toFixed(2);
+
+  sendToTelegram(current.name, seat, total, maxTotal, percent);
+
+  document.getElementById("name").innerHTML=`<b>الاسم:</b> ${current.name}`;
+  document.getElementById("total").innerHTML=`<b>المجموع:</b> ${total} / ${maxTotal}`;
+  document.getElementById("percent").innerHTML=`<b>النسبة المئوية:</b> ${percent}%`;
+
+  document.getElementById("result").style.display="block";
+}
+
+function showGrades(){
+  let html="";
+  for(let s in current.main){
+    html+=`${s}: ${current.main[s].score} / ${current.main[s].max}<br>`;
+  }
+  html+=`<br>🤓 تم (${current.name})<br><br>المواد التي لا تضاف إلى المجموع 👇<br>`;
+  for(let s in current.extra){
+    html+=`${s}: ${current.extra[s].score} / ${current.extra[s].max}<br>`;
+  }
+  document.getElementById("details").innerHTML=html;
+  document.getElementById("details").style.display="block";
+}
+</script>
+
+</body>
+</html>
