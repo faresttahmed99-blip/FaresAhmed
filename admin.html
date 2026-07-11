@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم رفيقي</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  body { font-family: 'Cairo', sans-serif; }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Login screen -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
+      <h1 class="text-2xl font-bold text-center mb-1"><i class="fas fa-lock text-green-700 mr-2"></i> لوحة تحكم رفيقي</h1>
+      <p class="text-sm text-gray-500 text-center mb-6">للمشرف فقط</p>
+      <input id="loginEmail" type="email" placeholder="البريد الإلكتروني" class="w-full px-4 py-3 rounded-xl border border-gray-300 mb-3">
+      <input id="loginPassword" type="password" placeholder="كلمة المرور" class="w-full px-4 py-3 rounded-xl border border-gray-300 mb-4">
+      <button onclick="doLogin()" class="w-full py-3 rounded-xl bg-green-700 hover:bg-green-800 text-white font-bold">دخول</button>
+      <p id="loginError" class="text-red-500 text-sm text-center mt-3 hidden"></p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden max-w-3xl mx-auto p-4 md:p-8">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold"><i class="fas fa-gauge text-green-700 mr-2"></i> لوحة تحكم رفيقي</h1>
+      <button onclick="doLogout()" class="text-sm text-red-500 hover:underline"><i class="fas fa-sign-out-alt mr-1"></i> خروج</button>
+    </div>
+
+    <!-- Section toggles -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6">
+      <h2 class="font-bold text-lg mb-4"><i class="fas fa-chart-line text-green-600 mr-2"></i> عدد الزيارات</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="text-center p-4 rounded-xl bg-green-50">
+          <div id="statsTotal" class="text-3xl font-black text-green-700">—</div>
+          <div class="text-xs text-gray-500 mt-1">إجمالي الزيارات</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-amber-50">
+          <div id="statsToday" class="text-3xl font-black text-amber-600">—</div>
+          <div class="text-xs text-gray-500 mt-1">زيارات اليوم</div>
+        </div>
+      </div>
+      <div id="statsWeekList" class="mt-4 space-y-1 text-sm"></div>
+    </div>
+
+    <!-- Section toggles -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6">
+      <h2 class="font-bold text-lg mb-4"><i class="fas fa-toggle-on text-green-600 mr-2"></i> تفعيل / تعطيل الأقسام</h2>
+      <p class="text-xs text-gray-400 mb-4">تعطيل قسم بيخفيه فوراً من الموقع والتطبيق لكل المستخدمين، من غير ما تلمس أي كود.</p>
+      <div id="sectionsToggleList" class="space-y-3"></div>
+    </div>
+
+    <!-- Announcement -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-6">
+      <h2 class="font-bold text-lg mb-4"><i class="fas fa-bullhorn text-green-600 mr-2"></i> شريط إعلان أعلى الموقع</h2>
+      <textarea id="announcementInput" rows="2" placeholder="اكتب إعلان يظهر لكل الزوار (اتركه فارغاً لإخفائه)" class="w-full px-4 py-3 rounded-xl border border-gray-300 mb-3"></textarea>
+      <button onclick="saveAnnouncement()" class="px-5 py-2 rounded-xl bg-green-700 hover:bg-green-800 text-white font-bold text-sm">حفظ الإعلان</button>
+      <span id="announcementSaved" class="text-green-600 text-sm mr-3 hidden"><i class="fas fa-check mr-1"></i> تم الحفظ</span>
+    </div>
+
+    <!-- Chat moderation -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="font-bold text-lg mb-4"><i class="fas fa-comments text-green-600 mr-2"></i> آخر رسائل الدردشة</h2>
+      <p class="text-xs text-gray-400 mb-4">تقدر تمسح أي رسالة غير لائقة مباشرة من هنا.</p>
+      <div id="chatModerationList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// Same Firebase project as the main site (rafiqi-app)
+const firebaseConfig = {
+  apiKey: "AIzaSyDNYsU1SrvLDhFtOoIsar9sTiMD7NS32VM",
+  authDomain: "rafiqi-app-3b65d.firebaseapp.com",
+  projectId: "rafiqi-app-3b65d",
+  storageBucket: "rafiqi-app-3b65d.firebasestorage.app",
+  messagingSenderId: "1068338152422",
+  appId: "1:1068338152422:web:98e019e9d8913813924c27"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const SECTIONS = [
+  {key:'ramadan', label:'رَمَضانُنَا'},
+  {key:'ruqya', label:'الرقية الشرعية'},
+  {key:'khutbah', label:'خطبة الجمعة'},
+  {key:'occasions', label:'المناسبات الإسلامية'},
+  {key:'communityChat', label:'الدردشة الجماعية'},
+  {key:'asbabNuzul', label:'أسباب النزول'}
+];
+
+const $ = q => document.querySelector(q);
+
+function doLogin(){
+  const email = $('#loginEmail').value.trim();
+  const pass = $('#loginPassword').value;
+  $('#loginError').classList.add('hidden');
+  auth.signInWithEmailAndPassword(email, pass).catch(err => {
+    $('#loginError').textContent = 'بيانات الدخول غير صحيحة';
+    $('#loginError').classList.remove('hidden');
+  });
+}
+function doLogout(){ auth.signOut(); }
+
+auth.onAuthStateChanged(user => {
+  if(user){
+    $('#loginScreen').classList.add('hidden');
+    $('#dashboard').classList.remove('hidden');
+    loadDashboard();
+  } else {
+    $('#loginScreen').classList.remove('hidden');
+    $('#dashboard').classList.add('hidden');
+  }
+});
+
+let currentConfig = { sections: {}, announcement: '' };
+
+async function loadDashboard(){
+  try{
+    const doc = await db.collection('siteConfig').doc('main').get();
+    currentConfig = doc.exists ? doc.data() : { sections: {}, announcement: '' };
+    renderToggles();
+  } catch(e){
+    console.error('loadDashboard config error:', e);
+    currentConfig = { sections: {}, announcement: '' };
+    $('#sectionsToggleList').innerHTML = `<p class="text-red-500 text-sm">تعذر تحميل الإعدادات: ${(e.message||e).toString()}</p>`;
+  }
+  $('#announcementInput').value = currentConfig.announcement || '';
+  loadChatMessages();
+  loadStats();
+}
+
+function todayKeyLocal(){ return new Date().toISOString().slice(0,10); }
+
+async function loadStats(){
+  try{
+    const doc = await db.collection('analytics').doc('summary').get();
+    const data = doc.exists ? doc.data() : {};
+    $('#statsTotal').textContent = (data.total || 0).toLocaleString('ar-EG');
+    const today = todayKeyLocal();
+    $('#statsToday').textContent = (data.days?.[today] || 0).toLocaleString('ar-EG');
+    const days = data.days || {};
+    const sortedDates = Object.keys(days).sort().reverse().slice(0, 7);
+    $('#statsWeekList').innerHTML = sortedDates.map(d => `
+      <div class="flex justify-between px-2 py-1 border-b border-gray-100">
+        <span class="text-gray-500">${d}</span>
+        <span class="font-bold">${days[d]}</span>
+      </div>
+    `).join('') || '<p class="text-gray-400 text-xs">لا توجد بيانات بعد</p>';
+  } catch(e){
+    $('#statsTotal').textContent = '—';
+    $('#statsToday').textContent = '—';
+  }
+}
+
+function renderToggles(){
+  const box = $('#sectionsToggleList');
+  box.innerHTML = SECTIONS.map(s => {
+    const enabled = currentConfig.sections?.[s.key] !== false;
+    return `
+    <div class="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50">
+      <span class="font-medium">${s.label}</span>
+      <button onclick="toggleSection('${s.key}', ${!enabled})" class="w-14 h-8 rounded-full transition ${enabled ? 'bg-green-600' : 'bg-gray-300'} relative">
+        <span class="absolute top-1 ${enabled ? 'right-1' : 'right-7'} w-6 h-6 bg-white rounded-full shadow transition-all"></span>
+      </button>
+    </div>`;
+  }).join('');
+}
+
+async function toggleSection(key, newValue){
+  currentConfig.sections = currentConfig.sections || {};
+  currentConfig.sections[key] = newValue;
+  try{
+    await db.collection('siteConfig').doc('main').set(currentConfig, {merge:true});
+  } catch(e){
+    alert('تعذر حفظ التغيير، تأكد من قواعد Firestore (Rules) ثم حاول مجدداً.');
+    console.error(e);
+  }
+  renderToggles();
+}
+
+async function saveAnnouncement(){
+  currentConfig.announcement = $('#announcementInput').value.trim();
+  try{
+    await db.collection('siteConfig').doc('main').set(currentConfig, {merge:true});
+    $('#announcementSaved').classList.remove('hidden');
+    setTimeout(()=> $('#announcementSaved').classList.add('hidden'), 2000);
+  } catch(e){
+    alert('تعذر حفظ الإعلان، تأكد من قواعد Firestore (Rules) ثم حاول مجدداً.');
+    console.error(e);
+  }
+}
+
+async function loadChatMessages(){
+  const box = $('#chatModerationList');
+  box.innerHTML = '<p class="text-sm text-gray-400">جاري التحميل...</p>';
+  try{
+    const snap = await db.collection('chatMessages').orderBy('timestamp','desc').limit(30).get();
+    if(snap.empty){ box.innerHTML = '<p class="text-sm text-gray-400">لا توجد رسائل بعد</p>'; return; }
+    box.innerHTML = snap.docs.map(d => {
+      const m = d.data();
+      const name = (m.name || 'مستخدم').replace(/</g,'&lt;');
+      const text = (m.text || '').replace(/</g,'&lt;');
+      return `
+      <div class="flex items-start justify-between gap-3 px-3 py-2 rounded-lg bg-gray-50">
+        <div class="flex-1">
+          <div class="text-xs font-bold text-green-700">${name}</div>
+          <div class="text-sm">${text}</div>
+        </div>
+        <button onclick="deleteMessage('${d.id}')" class="text-red-500 hover:text-red-700 text-sm"><i class="fas fa-trash"></i></button>
+      </div>`;
+    }).join('');
+  } catch(e){
+    box.innerHTML = '<p class="text-sm text-red-500">تعذر تحميل الرسائل</p>';
+  }
+}
+async function deleteMessage(id){
+  if(!confirm('متأكد إنك عايز تمسح الرسالة دي؟')) return;
+  await db.collection('chatMessages').doc(id).delete();
+  loadChatMessages();
+}
+</script>
+</body>
+</html>
